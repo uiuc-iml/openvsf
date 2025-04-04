@@ -32,15 +32,6 @@ def convert_to_numpy(data : Union[list,tuple,dict,np.ndarray,torch.Tensor]) -> U
         return data.cpu().numpy()
     return data
 
-def load_config(config_fn : str) -> dict:
-    with open(os.path.join(config_fn)) as file:
-        config = yaml.safe_load(file)
-    return config
-
-def save_config(config : dict, config_fn : str, sort_keys:bool=False):
-    with open(config_fn, 'w') as file:
-        yaml.dump(config, file, sort_keys=sort_keys)
-
 def to_json_dict(obj : dict) -> dict:
     """Converts all numpy arrays and torch Tensors to lists in
     a list / dictionary to prepare for saving to JSON / YAML."""
