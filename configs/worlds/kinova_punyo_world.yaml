@@ -1,0 +1,12 @@
+kinova:
+  type: robot
+  file_name: !relative_path ../../knowledge/robot_model/kinova_gen3_repaired.urdf
+punyo:
+  type: rigid
+  file_name: !relative_path ../../knowledge/robot_model/punyo_mesh.ply
+  parent_name: EndEffector_Link
+  parent_relative_transform: [[0.0, -1.0, 0.0, 0.0], [-0.05582150, 0.0, -0.9984407, 0.02111], 
+                              [0.99844076, 0.0, -0.0558215, 0.096142], [0.0, 0.0, 0.0, 1.0]]
+  file_name: !relative_path ../../knowledge/punyo/punyo_ref_mesh.ply
+
+

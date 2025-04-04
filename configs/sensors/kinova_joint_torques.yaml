@@ -1,0 +1,5 @@
+name: kinova_joint_torques
+type: JointTorqueSensor
+attachment_name: kinova
+link_names: ['Shoulder_Link', 'HalfArm1_Link', 'HalfArm2_Link', 'ForeArm_Link', 
+                'SphericalWrist1_Link', 'SphericalWrist2_Link', 'Bracelet_Link']

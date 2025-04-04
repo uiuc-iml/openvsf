@@ -1,0 +1,9 @@
+numpy
+scipy
+torch
+open3d
+meshio
+klampt>=0.10.0
+mesh2sdf
+cvxpy
+dacite

@@ -1,0 +1,6 @@
+angles: 7
+torques: 7
+sim_torques: 7
+pressure: 1
+punyo_curr_pts: [[390, 3], np.ndarray]
+punyo_force: [[390, 3], np.ndarray]

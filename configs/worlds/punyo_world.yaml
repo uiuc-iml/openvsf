@@ -1,0 +1,6 @@
+punyo:
+  type: deformable
+  file_name: !relative_path ../../knowledge/punyo/equalized.obj
+
+
+

@@ -1,0 +1,53 @@
+# demo simulation configuration
+
+world: !include worlds/kinova_punyo_world.yaml
+
+#uncomment to train on subset
+#train_sequences: [0]
+
+dataset:
+  keys:
+    angles: 7
+    torques: 7
+    sim_torques: 7
+    pressure: 1
+  sensor_keys:
+    kinova_joint_torques: torques
+    punyo_pressure: pressure
+  control_keys: 
+    kinova: angles
+
+sensors:
+  kinova_joint_torques: !include sensors/kinova_joint_torques.yaml
+  punyo_pressure: !include sensors/punyo_pressure.yaml
+
+calibrators:
+  kinova_joint_torques:
+    type: tare
+    num_samples: 20
+  punyo_pressure:
+    type: tare
+    num_samples: 20
+
+simulator:
+  type: quasistatic
+  deformables:
+    vsf:
+      type: point
+      model:
+        database_file_name: knowledge/vsf_database/small_object_params.json
+        sample_points: false
+        verbose: false
+      config:
+        friction_mu: 0.5
+        sim_slide: False
+        slide_step: 0.0001
+
+
+estimator:
+  type: quad_prog
+
+prior:
+  type: gaussian
+  mu: 0.0
+  var: 100.0

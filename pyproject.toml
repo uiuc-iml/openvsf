@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vsf"
+version = "0.0.1"
+description = "Open volumetric stiffness field"
+authors = [
+  { name = "Kris Hauser", email = "kh@abc.edu" },
+  { name = "Shaoxiong Yao", email = "sy@abc.edu" },
+  { name = "Jiaheng Han", email = "jh@abc.edu" }
+]
+readme = "README.md"
+license = { text = "MIT" }
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Development Status :: 4 - Beta",
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
+  "Topic :: Scientific/Engineering"
+]
+keywords = ["tactile model", "simulation", "estimation"]
+dependencies = [
+  "numpy",
+  "scipy",
+  "torch",
+  "open3d",
+  "meshio",
+  "klampt>=0.10.0",
+  "mesh2sdf",
+  "cvxpy",
+  "dacite",
+  "opencv-python"
+]
+
+[tool.setuptools.packages.find]
+include = ["vsf*"]
+exclude = ["demos*", "configs*", "out_data*", "knowledge*"]

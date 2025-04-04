@@ -1,0 +1,8 @@
+view:
+  origin: [-0.55639158,1.04689234,0.52593784]
+bbox: [[-1.03, -0.64, -0.22], [-0.29, 0.23, 0.73]]
+fps_num : 20000
+voxel_size : 0.02
+downsample_visual: true
+verbose: true
+#features: ['sam_seg', 'color', 'position']

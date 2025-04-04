@@ -1,0 +1,3 @@
+optimizer : 'sgd'          # optimizer type: 'quad_prog', 'sgd', 'diag_ekf', 'dense_ekf'
+# NOTE: sgd estimator does not use num_replay_update
+max_buffer_length : 2000   # max replay buffer length for the recursive estimator

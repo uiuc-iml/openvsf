@@ -1,0 +1,45 @@
+# demo simulation / estimation configuration for use with point_vsf_estimate.py
+
+world: !include worlds/kinova_world.yaml
+
+simulator:
+  type: quasistatic
+  deformables:
+    vsf:
+      model:
+        type: point
+        path: !relative_path ../demo_data/rubber_fig_tall_angle00/vsf_empty
+      config:
+        friction_mu: 0.5
+        sim_slide: False
+        slide_step: 0.0001
+
+sensors:
+  kinova_joint_torques: !include sensors/kinova_joint_torques.yaml
+
+calibrators:
+  kinova_joint_torques:
+    type: tare
+    num_samples: 20
+
+#uncomment to train on subset
+train_sequences: [0]
+test_sequences: [0]
+
+dataset:
+  keys:
+    angles: 7
+    torques: 7
+  control_keys:
+    kinova: angles
+  sensor_keys:
+    kinova_joint_torques: torques
+
+estimator: !include "estimators/quad_prog.yaml"
+# estimator: !include "estimators/sgd.yaml"
+# estimator: !include "estimators/diag_ekf.yaml"
+
+prior:
+  type: gaussian
+  mu: 0.0
+  var: 100.0

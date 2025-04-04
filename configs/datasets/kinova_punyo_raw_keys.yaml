@@ -1,0 +1,7 @@
+#used only in the punyo preprocessor
+angles: 7
+torques: 7
+sim_torques: 7
+pressure: 1
+punyo_color: [[480, 640, 3], 'img8']
+punyo_depth: [[480, 640], 'img16']
