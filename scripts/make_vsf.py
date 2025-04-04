@@ -11,7 +11,7 @@ from vsf.core.vsf_factory import VSFFactory, VSFFactoryConfig, VSFRGBDCameraFact
 from vsf.constructors import AnyVSFConfig
 from klampt import Geometry3D
 import dacite
-from iml_utils.config import load_config_recursive, save_config
+from vsf.utils.config_utils import load_config_recursive
 
 if __name__ == '__main__':
     np.random.seed(1)

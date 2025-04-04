@@ -18,7 +18,7 @@ from vsf.sensor.joint_torque_sensor import JointTorqueSensor
 from vsf.dataset.constructors import DatasetConfig, dataset_from_config
 from vsf.visualize.klampt_visualization import add_sim_to_vis
 from vsf.utils.perf import PerfRecorder
-from iml_utils.config import load_config_recursive, save_config
+from vsf.utils.config_utils import load_config_recursive
 
 DRAW_NORMALS = False
 DRAW_SPRINGS = False

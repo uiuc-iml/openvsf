@@ -9,7 +9,7 @@ from vsf.dataset.constructors import DatasetConfig, dataset_from_config
 from vsf.estimator.neural_vsf_estimator import NeuralVSFEstimator, NeuralVSFEstimatorConfig
 from vsf.sensor.constructors import CalibrationConfig, SensorConfig, calibration_from_config, BaseCalibrator
 from vsf.visualize.klampt_visualization import vsf_show
-from iml_utils.config import load_config_recursive, save_config
+from vsf.utils.config_utils import load_config_recursive
 import dacite
 
 if __name__ == '__main__':

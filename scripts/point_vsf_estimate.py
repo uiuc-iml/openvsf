@@ -21,7 +21,7 @@ from vsf.sim.metrics import predict_sensors, rmse_sensors, rmse_from_stats
 from vsf.utils.perf import PerfRecorder
 from vsf.utils.plot_utils import plot_eval_stats
 from vsf.utils.data_utils import to_json_dict
-from iml_utils.config import load_config_recursive, save_config
+from vsf.utils.config_utils import load_config_recursive, save_config
 from typing import Tuple
 
 def point_vsf_estimate_batch(vsf_sim : QuasistaticVSFSimulator,
