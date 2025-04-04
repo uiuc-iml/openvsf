@@ -1,0 +1,51 @@
+*.pyc
+*.o
+*.stackdump
+build/
+__pycache__/
+*.egg-info/
+
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+#CMake temporary files
+CMakeFiles
+CMakeCache.txt
+CPack*
+CTest*
+cmake*.cmake
+Makefile
+_CPack*
+
+#emacs backups
+*~
