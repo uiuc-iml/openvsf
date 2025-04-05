@@ -25,15 +25,13 @@ class SimState:
     Forces are not assumed to be symmetric, so if you wish to store contact
     forces applied to a with equal and opposite forces on b, you must store
     both (a,b) and (b,a) in the contact_forces dictionary. 
-    
-    Attributes:
-        body_transforms (Dict[str, torch.Tensor]): Named rigid body homogeneous transforms.
-        body_states (Dict[str, torch.Tensor]): Named body states (e.g., robot configs, deformable states).
-        contacts (Dict[Tuple[str,str], ContactState]): Contact state between pairs of rigid bodies.
     """
-    body_transforms: Dict[str, torch.Tensor] = field(default_factory=dict)  # Named rigid body homogeneous transforms
-    body_states: Dict[str, torch.Tensor] = field(default_factory=dict)      # Named body states (e.g., robot configs, deformable states)
-    contacts : Dict[Tuple[str,str], ContactState] = field(default_factory=dict)  # Contact state between pairs of rigid bodies
+    body_transforms: Dict[str, torch.Tensor] = field(default_factory=dict)  
+    """Named rigid body homogeneous transforms"""
+    body_states: Dict[str, torch.Tensor] = field(default_factory=dict)      
+    """Named body states (e.g., robot configs, deformable states)"""
+    contacts : Dict[Tuple[str,str], ContactState] = field(default_factory=dict)  
+    """Contact state between pairs of rigid bodies"""
 
     def subgraph(self, names : List[str]) -> SimState:
         """Returns a subgraph of the simulation state."""
