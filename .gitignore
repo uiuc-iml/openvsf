@@ -47,5 +47,8 @@ cmake*.cmake
 Makefile
 _CPack*
 
+# Keep makefile in docs folder for documentation generation
+!docs/Makefile
+
 #emacs backups
 *~
