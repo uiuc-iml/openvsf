@@ -229,7 +229,8 @@ class QuasistaticVSFSimulator:
                 for b in bodies:
                     bname = self.klampt_world_wrapper.name_lst[b]
                     inds = (body_idx == b).nonzero()[0]
-                    csk = ContactState(torch.tensor(cps[inds], **tsr_params), forces[inds], torch.tensor(vsf_pt_idx[inds], **tsr_params))
+                    csk = ContactState(torch.tensor(cps[inds], **tsr_params), forces[inds], 
+                                       torch.tensor(vsf_pt_idx[inds], device=tsr_params['device']), None)
                     csb = ContactState(csk.points, -csk.forces, csk.elems2, csk.elems1)
                     self._state.contacts[(k,bname)] = csk
                     self._state.contacts[(bname,k)] = csb
