@@ -4,6 +4,13 @@ import sys
 # Insert the parent directory (the folder above `docs/`) so that Python can find vsf/
 sys.path.insert(0, os.path.abspath('..'))
 
+autodoc_mock_imports = [
+    "OpenGL",
+    "OpenGL.GL",
+    "OpenGL.GLU",
+    # any other modules that load OpenGL
+]
+
 # -- Project information
 project = 'openvsf'
 copyright = '2025, Shaoxiong Yao'
