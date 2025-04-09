@@ -9,16 +9,15 @@ build:
   os: ubuntu-22.04
   tools:
     python: "3.10"
+  image: "latest"
 
 # Build documentation in the "docs/" directory with Sphinx
 sphinx:
-   configuration: docs/source/conf.py
+  configuration: docs/source/conf.py
 
-build:
-  image: "latest"
 python:
   install:
-    - requirements: docs/requirements.txt
+    - requirements: requirements.txt
     - method: pip
       path: .
         
