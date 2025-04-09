@@ -5,6 +5,7 @@ import sys
 sys.path.insert(0, os.path.abspath('..'))
 
 autodoc_mock_imports = [
+    "klampt",
     "OpenGL",
     "OpenGL.GL",
     "OpenGL.GLU",
