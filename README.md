@@ -63,6 +63,9 @@ To install the project in editable mode, use:
 pip install -e .
 ```
 
+## Documentation
+
+[Python Manual and API Documentation](https://openvsf.readthedocs.io/en/latest/index.html)
 
 ## Walkthrough
 
