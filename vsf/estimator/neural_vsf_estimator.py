@@ -9,7 +9,7 @@ from ..sim.quasistatic_sim import QuasistaticVSFSimulator
 from ..sim.sim_state_cache import SimStateCache
 from ..dataset import BaseDataset,DatasetConfig
 from ..sensor import BaseCalibrator
-from ..utils.data_utils import convert_to_tensor
+from ..utils.data_utils import convert_to_tensor, remap_dict_in_seq
 from dataclasses import dataclass
 from typing import Dict,List,Union
 
@@ -130,12 +130,10 @@ class NeuralVSFEstimator(BaseVSFMaterialEstimator):
             seq = dataset[torch.randint(0,len(dataset),(1,)).item()]
             
             # collect controls and observations in the sequence
-            control_seq = []
-            observation_seq = []
-            for step_idx in range(len(seq)):
-                frame_data = seq[step_idx]
-                control_seq.append({k:frame_data[v] for k,v in dataset_metadata.control_keys.items()})
-                observation_seq.append({k:frame_data[v] for k,v in dataset_metadata.sensor_keys.items()})
+            # if control_keys/sensor_keys are not provided, default to use object/sensor names for default keys
+            control_keys = dataset_metadata.control_keys if len(dataset_metadata.control_keys) != 0 else sim.get_control_keys()
+            sensor_keys = dataset_metadata.sensor_keys if len(dataset_metadata.control_keys) != 0 else sim.get_sensor_keys()
+            control_seq, observation_seq = remap_dict_in_seq(seq, control_keys, sensor_keys)
 
             sim.reset()
             self.online_reset(sim)

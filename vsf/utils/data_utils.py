@@ -45,6 +45,59 @@ def to_json_dict(obj : dict) -> dict:
         return obj.cpu().numpy().tolist()
     return obj
 
+def remap_dict(data, *key_mappings) -> List[dict]:
+    """Remaps the keys of a dictionary according to the provided mappings.
+
+    Example:
+        data = {'old_key1': 'value1', 'old_key2': 'value2'}
+        remapped_data = remap_dict(data, {'new_key1': 'old_key1', 'new_key2': 'old_key2'})
+        print(remapped_data)  # {'new_key1': 'value1', 'new_key2': 'value2'}
+
+    Args:
+        data (dict): The dictionary to remap.
+        key_mappings (list of dict): The key mappings, where each tuple
+            contains a mapping of old keys to new keys.
+            For example, [{'old_key1': 'new_key1', 'old_key2': 'new_key2'}].
+
+    Returns:
+        list of dict: The remapped dictionaries.
+    """
+    res = []
+    for km in key_mappings:
+        data_selected = {}
+        for k, v in km.items():
+            if v in data:
+                data_selected[k] = data[v]
+        res.append(data_selected)
+    return res
+
+def remap_dict_in_seq(sequence_data, *key_mappings) -> List[List[dict]]:
+    """Remaps the keys of a sequence of dictionaries according to the provided mappings.
+    
+    Example:
+        sequence_data = [{'old_key1': 'value1', 'old_key2': 'value2'},
+                         {'old_key1': 'value3', 'old_key2': 'value4'}]
+        remapped_sequence = remap_dict_in_seq(sequence_data, {'new_key1': 'old_key1', 'new_key2': 'old_key2'})
+        print(remapped_sequence)  # [{'new_key1': 'value1', 'new_key2': 'value2'}, {'new_key1': 'value3', 'new_key2': 'value4'}].
+
+    Args:
+        sequence_data (list of dict): The sequence of dictionaries to remap.
+        key_mappings (list of dict): The key mappings, where each tuple
+            contains a mapping of old keys to new keys.
+            For example, [{'old_key1': 'new_key1', 'old_key2': 'new_key2'}].
+
+    Returns:
+        list of list of dict: The remapped dictionaries list.
+    """
+    res = []
+    for km in key_mappings:
+        res2 = []
+        for data in sequence_data:
+            res2.append(remap_dict(data, km)[0])
+        res.append(res2)
+    return res
+    
+
 def index_to_coord(index, b_min, b_max, vg_shape):
     b_min, b_max, vg_shape = np.array(b_min), np.array(b_max), np.array(vg_shape)
     coord = (index / vg_shape) * (b_max - b_min) + b_min

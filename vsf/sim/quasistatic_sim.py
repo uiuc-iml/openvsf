@@ -159,12 +159,12 @@ class QuasistaticVSFSimulator:
         """
         self.load_state(SimState(body_transforms=state['body_transforms'],body_states=state['body_states'],contacts={k:ContactState(**v) for (k,v) in state['contacts'].items()}))
     
-    def step(self, control: dict[str, np.ndarray], dt : float): 
+    def step(self, controls: dict[str, np.ndarray], dt : float): 
         """
         Simulates the state transition based on the control input.
 
         Args:
-            control (dict[str, np.ndarray]): A dictionary containing the control inputs. 
+            controls (dict[str, np.ndarray]): A dictionary containing the control inputs. 
                 The keys are the names of the control inputs. Each control input is 
                 a NumPy array of shape ``(*controlInputShape)``.
                 For example, with a single robot arm in the simulator, the control input 
@@ -186,12 +186,14 @@ class QuasistaticVSFSimulator:
             tsr_params = {'device': list(tsr_params_set)[0][0], 'dtype': list(tsr_params_set)[0][1]}
         
         self.perfer.start('kinematic')        
-        for name, control in control.items():
+        for name, control in controls.items():
             if name in self.klampt_world_wrapper.control_type_dict:
                 self.klampt_world_wrapper.apply_control(name, control)
             elif name in self.vsf_objects:
                 assert control.shape == (4,4),"Can only accept VSF pose controls for now"
                 self.vsf_objects[name].pose = control
+            else:
+                print("Warning: control {} not found in the simulator".format(name))
         self.perfer.stop('kinematic')
         
         self.perfer.start('get_robot_configs')
@@ -264,4 +266,28 @@ class QuasistaticVSFSimulator:
             observation_dict[sensor.name] = sensor.predict(self._state)
         return observation_dict
 
-
+    def get_control_keys(self, suffix='_state') -> dict[str, str]:
+        """
+        Returns the control keys of the simulator.
+        
+        Args: 
+            suffix: String to be added after the object name, default '_state'.
+        """
+        control_keys = {}
+        for name in self.klampt_world_wrapper.control_type_dict.keys():
+            control_keys[name] = name + suffix
+        for name in self.vsf_objects.keys():
+            control_keys[name] = name + suffix
+        return control_keys
+    
+    def get_sensor_keys(self, suffix='') -> dict[str, str]:
+        """
+        Returns the sensor keys of the simulator.
+        
+        Args: 
+            suffix: String to be added after the sensor name, default ''.
+        """
+        sensor_keys = {}
+        for sensor in self.sensors:
+            sensor_keys[sensor.name] = sensor.name + suffix
+        return sensor_keys
