@@ -6,6 +6,7 @@ from .utils.data_utils import sdf_to_points
 import torch
 import os
 import klampt
+from klampt.math import se3
 import numpy as np
 import open3d as o3d
 from dataclasses import dataclass
@@ -162,49 +163,84 @@ def vsf_from_mesh(mesh : Union[str,klampt.TriangleMesh],
         rest_points = sdf_to_points(sdf, aabb[1], aabb[0], thresh=sdf_thres)        
         return PointVSF(rest_points, config)
 
-def vsf_from_rgbd(bmin : np.ndarray, bmax : np.ndarray, voxel_size: float, 
-                  pc : np.ndarray, camera_origin : np.ndarray,
-                  depth = float('inf'), N_points = 30000) -> PointVSF:
-    """Creates an empty point-based VSF from an RGBD image.  The image is given
-    as a point cloud.
-    
-    The bounding box is given by bmin and bmax.  The point cloud is given
-    by pc, and the camera origin is given by camera_origin.  The depth
-    parameter gives the maximum depth extrapolation behind the observed
-    points.
-    
-    TODO: this function ideally should enable creation of a neural VSF,
-    where no point sampling is required, but the invisible volume will
-    be computed to indicate regions with possible non-zero stiffness.
-    
-    Inputs:
-    - bmin: np.ndarray, the minimum corner of the bounding box, [x_min, y_min, z_min] 
-    - bmax: np.ndarray, the maximum corner of the bounding box, [x_max, y_max, z_max]
-    - pc: np.ndarray, the point cloud, shape (N,3)
-    - camera_origin: np.ndarray, the origin of the camera, [x, y, z]
-    - depth: float, the maximum depth extrapolation behind the observed points
-    - N_points: int, the maximum number of points to use in the VSF model
-    """
-    assert bmin.shape == (3,)
-    assert bmax.shape == (3,)
-    assert pc.shape[1] == 3
-    assert camera_origin.shape == (3,)
-    view = ViewConfig(origin=camera_origin)  # need to set the origin of the camera so that volume points can be created
-    # we will select points within a bounding box 
-    # TODO: out_dir is no a required argument anymore, by default 
-    #       created VSF will not be saved on the disk
-    config = VSFRGBDCameraFactoryConfig(None, fps_num=N_points, voxel_size=voxel_size,
-                                        view = view, bbox = [bmin, bmax], 
-                                        downsample_visual=True, verbose=True)
-    factory = VSFRGBDCameraFactory(config)
-    
-    pcd = o3d.geometry.PointCloud()
-    pcd.points = o3d.utility.Vector3dVector(pc)
-    # process() does all the work
-    vsf_empty = factory.process(pcd)  #the PCD file is the point cloud of the RGBD scene, including the background 
-    print('{} rest points for VSF model created from RGBD factory'.format(len(vsf_empty.rest_points)))
+def vsf_from_rgbd(rgb_image : np.ndarray, depth_image : np.ndarray, bmin : np.ndarray, bmax : np.ndarray,
+                  camera_intrinsics : np.ndarray, camera_extrinsics : np.ndarray,
+                  depth_scale : float = 1000.0, depth_trunc : float = 3.0,
+                  type = 'point',
+                  N_points : int = 30000, voxel_size : float = 0.01) -> Union[NeuralVSF,PointVSF]:
+    """Creates an empty point-based VSF from an RGBD image.
 
-    return vsf_empty
+    This function creates a VSF from an RGBD image. The occupied volume is defined by the bounding box
+    and the volume behind the object (from the camera point of view). The camera intrinsics and extrinsics
+    are used to project the depth image into 3D points. The depth scale and truncation are used to convert
+    the depth image to meters. The number of points and voxel size are used to create the VSF.
+
+    Inputs:
+    - rgb_image: np.ndarray, the RGB image, shape (H,W,3)
+    - depth_image: np.ndarray, the depth image, shape (H,W)
+    - bmin: np.ndarray, the minimum corner of the bounding box, [x_min, y_min, z_min]
+    - bmax: np.ndarray, the maximum corner of the bounding box, [x_max, y_max, z_max]
+    - camera_intrinsics: np.ndarray, the camera intrinsics, shape (3,3)
+    - camera_extrinsics: np.ndarray, the camera extrinsics, shape (4,4)
+    - depth_scale: float, the depth scale, default 1000.0
+    - depth_trunc: float, the depth truncation, default 3.0
+    - type: str, the type of VSF to create, 'point' or 'neural', default 'point'
+    - N_points: int, the maximum number of points to use in the point VSF model, default 30000
+    - voxel_size: float, the voxel size, default 0.01
+    """
+    from klampt import Geometry3D, Heightmap
+
+    vp = klampt.Viewport()
+    vp.setPose(*se3.from_homogeneous(camera_extrinsics))
+    vp.w, vp.h = rgb_image.shape[1], rgb_image.shape[0]
+    vp.fx, vp.fy = camera_intrinsics[0,0], camera_intrinsics[1,1]
+    vp.cx, vp.cy = camera_intrinsics[0,2], camera_intrinsics[1,2]
+
+    # remove points beyond the truncation distance    
+    depth_image[depth_image > depth_trunc*depth_scale] = 0
+
+    # create a heightmap from the rgbd image
+    hm_data = Heightmap()
+    hm_data.setViewport(vp)
+    hm_data.setHeightImage(depth_image, 1/depth_scale)
+    hm_data.setColorImage(rgb_image)
+    hm = Geometry3D(hm_data)
+
+    # heightmap to sdf with klampt
+    sdf = hm.convert('ImplicitSurface')
+
+    # create a bounding box
+    bbox = klampt.GeometricPrimitive()
+    bbox.setAABB(bmin, bmax)
+    bbox = Geometry3D(bbox)
+    bbox = bbox.convert('ImplicitSurface', voxel_size)
+
+    # compute the intersection of the sdf and the bounding box
+    sdf.getImplicitSurface().setValues(-sdf.getImplicitSurface().getValues())
+    bbox.getImplicitSurface().setValues(-bbox.getImplicitSurface().getValues())
+    # use the bbox as the bounding box for the object
+    # so merge bbox with sdf
+    bbox.merge(sdf)
+    sdf = bbox
+    sdf.getImplicitSurface().setValues(-sdf.getImplicitSurface().getValues())
+
+    if type == 'point':
+        pc = sdf.convert('PointCloud')
+        points = pc.getPointCloud().getPoints()
+
+        # farthest point sampling
+        # downsample the point cloud in a non-axis aligned way to avoid aliasing
+        import open3d as o3d
+        pc_o3d = o3d.geometry.PointCloud()
+        pc_o3d.points = o3d.utility.Vector3dVector(points)
+        pc_o3d = pc_o3d.farthest_point_down_sample(N_points)
+        points = np.asarray(pc_o3d.points)
+
+        return PointVSF(points)
+    elif type == 'neural':
+        aabb = sdf.getBBTight()
+        config = NeuralVSFConfig(aabb=aabb)
+        return NeuralVSF(config, sdf=torch.tensor(sdf.getImplicitSurface().getValues(), dtype=torch.float32))
 
 def vsf_from_vsf(config : Union[NeuralVSFConfig,PointVSFConfig], 
                  vsf: Union[NeuralVSF,PointVSF], 
@@ -244,7 +280,7 @@ def vsf_from_vsf(config : Union[NeuralVSFConfig,PointVSFConfig],
 
             # build dataloader
             from torch.utils.data import DataLoader
-            dataloader = DataLoader(torch.utils.data.TensorDataset(points, stiffness), batch_size=8192, shuffle=True)
+            dataloader = DataLoader(torch.utils.data.TensorDataset(points, stiffness), batch_size=1000, shuffle=True)
 
             # initialize the neural VSF model
             device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -265,7 +301,7 @@ def vsf_from_vsf(config : Union[NeuralVSFConfig,PointVSFConfig],
             for i in tqdm(range(convert_config.max_epochs)):
                 for batch in dataloader:
                     points, stiffness = batch
-                    stiffness = stiffness.to(device) / voxel_size**3
+                    stiffness = stiffness.to(device) / voxel_size**3 / 10000
                     vsf_samples = points.to(device)
                     stiffness2 = vsf2.getStiffness(vsf_samples)
                     loss = torch.mean((stiffness - stiffness2)**2)
