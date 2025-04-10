@@ -13,16 +13,11 @@ Core features include:
 - VSF interaction simulation: produces estimated tactile observations for a moving robot and sensors.
 - VSF meta-learning: priors that map feature vectors (e.g., color, visual features) to stiffness can be learned.
 - VSF physics simulation: treat VSFs as deformable assets in quasistatic physics simulators.  
+- Point <-> neural VSF convertion through "distillation".
 - Custom robot and sensor representations
 
 TODOs BEFORE RELEASE:
-- Integrate auto-generate documentation with readthedocs. (TODO: get the RTD links set up)
-- Convert scripts to use dataclasses and configuration files to be correspondent to dataclasses. (TODO: fix the neural_X scripts) 
-- Have a standard way to set the initial state for simulations / reset to make sense.
-- Test VSF pose control during estimation
-- Point -> neural VSF "distillation", completed by Jiaheng in `demos/neural_vsf_playground.ipynb` need to check volume scale.
-- External release: migration to OpenVSF package, pyproject.toml (standard tool) / setup.py (may need to include extra lines) installation
-- Reorgznie the demo dataset structure, align neural and point data formats.
+- Provide "pre-trained" VSF models in `demo_data`.
 
 Features planned soon:
 - Rigid body simulation
@@ -32,6 +27,7 @@ Features planned soon:
 - **Efficiency optimization**: 
     + speedup neural VSF estimation by scatter dataset to vertex contact forces level
     + use sparse matrix for Punyo dense forces Jacobian
+- Have a standard way to set the initial state for simulations / reset to make sense.
 
 ## Installation
 
