@@ -44,7 +44,7 @@ def world_wrapper_from_config(config : WorldConfig) -> klamptWorldWrapper:
         if item_type == 'robot':
             world_wrapper.add_robot(name, item.file_name)
             if item.initial_config is not None:
-                world_wrapper.world.robot(0).setConfig(item.initial_config)
+                world_wrapper.world.robot(name).setConfig(item.initial_config)
         elif item_type == 'rigid':
             parent_name = item.parent_name
             parent_relative_transform = np.array(item.parent_relative_transform)
