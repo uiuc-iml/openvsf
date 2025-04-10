@@ -23,7 +23,6 @@ simulator:
                     skip_connection: [4]
             config:
                 N_samples: 100
-                volume_unit: 10000
 
 
 estimator:

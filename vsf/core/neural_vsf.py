@@ -21,6 +21,8 @@ class NeuralVSFConfig:
     """The hidden dimension of the neural network."""
     skip_connection: List[int] = field(default_factory=lambda: [4])
     """The layers to add skip connections to."""
+    output_scale: float = 1e4
+    """Multiply the network output by a constant factor."""
 
 
 # borrowed (and modified) from https://github.com/ashawkey/torch-ngp
@@ -96,6 +98,7 @@ class VSFNetwork(nn.Module):
                  output_dims=[1],
                  aabb=None,
                  sdf=None,
+                 output_scale=1e4,
                  **kwargs
                  ):
         
@@ -121,6 +124,7 @@ class VSFNetwork(nn.Module):
         self.output_dim = sum(output_dims)
         self.encoder, self.in_dim = get_encoder('frequency', input_dim=3, multires=4)
         # self.encoder, self.in_dim = get_encoder('hashgrid', input_dim=3, num_levels=8, level_dim=2, base_resolution=16, log2_hashmap_size=12, desired_resolution=512)
+        self.output_scale = output_scale
 
         sigma_net = []
         for l in range(num_layers):
@@ -171,7 +175,7 @@ class VSFNetwork(nn.Module):
         sigma = torch.exp(h)
         sigma_r[bound_mask] = sigma
 
-        return sigma_r
+        return sigma_r * self.output_scale
     
     def get_sdf(self, x):
         assert self.sdf is not None, "SDF not provided"
@@ -199,7 +203,8 @@ class VSFNetwork(nn.Module):
             "aabb": self.aabb,
             "center": self.center,
             "scale": self.scale,
-            "sdf": self.sdf
+            "sdf": self.sdf,
+            "output_scale": self.output_scale
         }
         torch.save(save_dict, path)
 
@@ -210,6 +215,7 @@ class VSFNetwork(nn.Module):
         self.center = load_dict["center"]
         self.scale = load_dict["scale"]
         self.sdf = load_dict["sdf"]
+        self.output_scale = load_dict["output_scale"]
         self.eval()
 
     def to(self, device):

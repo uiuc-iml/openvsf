@@ -30,7 +30,7 @@ class NeuralVSFEstimatorConfig:
     regularizer_samples: int = 1000
     """Number of points to sample for the regularization term.  This is used to regularize
     the stiffness in unobserved regions towards zero."""
-    regularizer_scale: float = 1e-4
+    regularizer_scale: float = 1e-8
     """The scale of the regularization term.  This is used to regularize the stiffness
     in unobserved regions towards zero. """
     max_epochs : int = 100

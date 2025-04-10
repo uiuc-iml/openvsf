@@ -48,7 +48,7 @@ def compute_vertex_area(points: torch.Tensor, triangles: torch.Tensor) -> torch.
 
 def compute_vsf_force(vertices: torch.Tensor, start: torch.Tensor, end: torch.Tensor,
                       vertices_normal: torch.Tensor, vsf: NeuralVSF,
-                      N_samples=100, volume_unit=1e4):
+                      N_samples=100):
     """
     Compute the VSF force on the vertices of the mesh.
 
@@ -59,7 +59,6 @@ def compute_vsf_force(vertices: torch.Tensor, start: torch.Tensor, end: torch.Te
         vertices_normal: Tensor of shape (N, 3) representing the normal vectors at each vertex.
         vsf: NeuralVSF object representing the volumetric stiffness field.
         N_samples: Number of samples to use for VSF integration for each segment.
-        volume_unit: Volume unit for VSF integration.
     Returns:
         vsf_force_all: Tensor of shape (N, 3) representing the VSF force on each vertex.
     """
@@ -96,7 +95,7 @@ def compute_vsf_force(vertices: torch.Tensor, start: torch.Tensor, end: torch.Te
     vsf_force = torch.sum((samples - vertices[:,None,:]).double() * stiffness.double(), dim=1) * \
                 reference_N_samples[:, None] / N_samples
     
-    vsf_force *= (vertices_normal.double() * direction.double()).sum(dim=1, keepdim=True) * volume_unit
+    vsf_force *= (vertices_normal.double() * direction.double()).sum(dim=1, keepdim=True)
     vsf_force = vsf_force.float()
 
     vsf_force_all[mask] = vsf_force
@@ -110,10 +109,8 @@ class NeuralVSFSimConfig:
     
     Attributes:
         N_samples: Number of samples to use for VSF integration.
-        volume_unit: Volume unit for VSF integration.
     """
     N_samples: int = 100
-    volume_unit: float = 1e4
     
 
 class NeuralVSFQuasistaticSimBody:
@@ -252,8 +249,7 @@ class NeuralVSFQuasistaticSimBody:
             vertices_force = torch.zeros_like(vertices)
             force = -compute_vsf_force(vertices_repeat, start, end, vertices_normal_repeat,
                                        self.vsf.vsfNetwork,
-                                       self.config.N_samples // N + 1, # split samples to each segment
-                                       self.config.volume_unit)
+                                       self.config.N_samples // N + 1) # split samples to each segment
             vertices_force[any_contact] = force.reshape(N, -1, 3).sum(dim=0) # in vsf local frame
             vertices_force = vertices_force @ l2w[:3, :3].T # vsf local frame to world frame
 
