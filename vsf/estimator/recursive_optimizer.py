@@ -376,7 +376,7 @@ class SGDEstimator(LinearRecursiveEstimator):
         for step_idx in step_idx_ary:
             loss = self.sgd_step(*self.obs_buffer[step_idx])
             if verbose:
-                print("loss:", loss.detach().cpu().numpy())
+                print("loss:", loss)
         
         if self.non_negative:
             with torch.no_grad():
@@ -615,11 +615,12 @@ class DenseEKF(LinearRecursiveEstimator):
         """
         obs_idx = obs_model.state_indices
         obs_W_tsr = obs_model.matrix
-        z = measurement
+        z = measurement.clone()
         if obs_model.bias is not None:
             z -= obs_model.bias
         Rinv = 1.0 / obs_model.var if obs_model.var.ndim == 1 else torch.linalg.inv(obs_model.var)
         Rinvz = z * Rinv if obs_model.var.ndim == 1 else Rinv @ z 
+
         y_mu_inc = (obs_W_tsr.T @ Rinvz)
         if self.include_heterogeneous:
             self.y_info_mu[obs_idx] += y_mu_inc
