@@ -112,7 +112,15 @@ class GaussianContextualPrior(LearnableContextualPrior):
     def train(self):
         self.mean.requires_grad = True
         self.var.requires_grad = True
+    
+    def load_state_dict(self, params_dict:dict):
+        self.mean = params_dict.get('mean')
+        self.var = params_dict.get('var')
 
+    def state_dict(self):
+        return {
+            'mean': self.mean, 'var': self.var
+        }
 
 @dataclass
 class TorchLearnConfig:
