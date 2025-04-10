@@ -1,3 +1,7 @@
+
+# ignore demo_data put in the root of the repo
+demo_data/
+
 *.pyc
 *.o
 *.stackdump
