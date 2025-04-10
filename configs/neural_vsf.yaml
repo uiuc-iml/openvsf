@@ -1,0 +1,31 @@
+## CHANGE HERE: PATH TO DATASET DIRECTORY ###
+# dataset: !include ../demo_data/datasets/punyo_dense_forces_dataset_config.yaml
+dataset: !include ../demo_data/datasets/joint_torques_dataset_config.yaml
+
+# world: !include worlds/kinova_punyo_world.yaml
+world: !include worlds/kinova_world.yaml
+
+sensors:
+    # punyo_force: !include sensors/punyo_force.yaml
+    kinova_joint_torques: !include sensors/kinova_joint_torques.yaml
+
+simulator:
+    type: quasistatic
+    deformables:
+        boot:  # add an object named boot as a deformable object
+            model:
+                type: neural
+                init_method: mesh
+                path: !relative_path ../demo_data/datasets/brown_boot_moving/object/mesh.obj
+                neural_vsf_config:
+                    num_layers: 8
+                    hidden_dim: 64
+                    skip_connection: [4]
+            config:
+                N_samples: 100
+                volume_unit: 10000
+
+
+estimator:
+    lr: 0.0002
+    max_epochs: 500
