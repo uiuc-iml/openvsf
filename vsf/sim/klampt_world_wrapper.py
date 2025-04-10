@@ -207,29 +207,6 @@ class klamptWorldWrapper:
             child_R, child_t = se3.mul((parent_R, parent_t), relative_transformation)
             child_model.setTransform(child_R, child_t)
     
-    def get_robot_gravity_torques(self, name, g=(0,0,-9.8), form='list'):
-        """
-        Get gravity torques of a robot in the Klamp't world.
-        This function has flipped the sign of the gravity vector to match the
-        sign of the torques measured by real-world sensors.
-        
-        TODO: this function assumes the first joint is not used.
-        
-        :param name: name of the robot
-        :param g: gravity vector
-        :param form: return format, 'npARY' or 'list'
-        """
-        robot = self.world.robot(name)
-        # a_torques = self.robot.torquesFromAccel(ddq)
-        tau_g = robot.getGravityForces(g)
-        # TODO: understand why torques' signs are flipped
-        tau_g = -np.array(tau_g[-8:-1])
-        
-        if form == 'npARY':
-            return tau_g
-        elif form == 'list':
-            return list(tau_g)
-
     def update_geometry(self, name: str, rotation: Rotation, position: Vector3):
         """
         Update the rigid transformation of a geometry
