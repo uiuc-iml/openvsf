@@ -22,7 +22,6 @@ TODOs BEFORE RELEASE:
 Features planned soon:
 - Rigid body simulation
 - **Sensor model unification**: 
-    + run NeuralVSF using sensors other than Punyo dense forces
     + run PointVSF using Punyo dense forces, add compute Jacobian in Punyo sensor class, other part should be the same (?)
 - **Efficiency optimization**: 
     + speedup neural VSF estimation by scatter dataset to vertex contact forces level
