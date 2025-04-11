@@ -280,7 +280,7 @@ def vsf_from_vsf(config : Union[NeuralVSFConfig,PointVSFConfig],
 
             # build dataloader
             from torch.utils.data import DataLoader
-            dataloader = DataLoader(torch.utils.data.TensorDataset(points, stiffness), batch_size=1000, shuffle=True)
+            dataloader = DataLoader(torch.utils.data.TensorDataset(points, stiffness), batch_size=8192, shuffle=True)
 
             # initialize the neural VSF model
             device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -301,7 +301,7 @@ def vsf_from_vsf(config : Union[NeuralVSFConfig,PointVSFConfig],
             for i in tqdm(range(convert_config.max_epochs)):
                 for batch in dataloader:
                     points, stiffness = batch
-                    stiffness = stiffness.to(device) / voxel_size**3 / 10000
+                    stiffness = stiffness.to(device) / voxel_size**3
                     vsf_samples = points.to(device)
                     stiffness2 = vsf2.getStiffness(vsf_samples)
                     loss = torch.mean((stiffness - stiffness2)**2)
@@ -339,7 +339,7 @@ def vsf_from_vsf(config : Union[NeuralVSFConfig,PointVSFConfig],
             stiffness = torch.cat(stiffness,dim=0)
 
             # remove low stiffness points
-            mask = (stiffness > 1e-3).squeeze()
+            mask = (stiffness > 1e1).squeeze() # the uniform stiffness is N/m^4, so a large threshold
             points = points[mask]
             stiffness = stiffness[mask]
 

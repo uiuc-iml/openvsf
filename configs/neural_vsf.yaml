@@ -1,13 +1,13 @@
 ## CHANGE HERE: PATH TO DATASET DIRECTORY ###
-# dataset: !include ../demo_data/datasets/punyo_dense_forces_dataset_config.yaml
-dataset: !include ../demo_data/datasets/joint_torques_dataset_config.yaml
+dataset: !include ../demo_data/datasets/punyo_dataset_config.yaml
+# dataset: !include ../demo_data/datasets/joint_torques_dataset_config.yaml
 
 # world: !include worlds/kinova_punyo_world.yaml
 world: !include worlds/kinova_world.yaml
 
 sensors:
-    # punyo_force: !include sensors/punyo_force.yaml
-    kinova_joint_torques: !include sensors/kinova_joint_torques.yaml
+    punyo_force: !include sensors/punyo_force.yaml
+    # kinova_joint_torques: !include sensors/kinova_joint_torques.yaml
 
 simulator:
     type: quasistatic
