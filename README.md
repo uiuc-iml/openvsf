@@ -62,6 +62,19 @@ pip install -e .
 
 [Python Manual and API Documentation](https://openvsf.readthedocs.io/en/latest/index.html)
 
+### Building Documentations Locally
+
+1. Install Sphinx:  
+    ```bash
+    pip install sphinx sphinx-autobuild
+    ```
+1. Navigate to `docs` and build:
+    ```bash
+    cd docs && make html
+    ```
+1. View the generated docs in `build/html/index.html`.
+
+
 ## Walkthrough
 
 The best way to get familiarized with this package is the Jupyter notebooks `demos/vsf_playground.ipynb` and `demos/neural_vsf_playground.ipynb`.  These provide tutorials that walk you through the key steps of the pipeline:
@@ -270,24 +283,6 @@ You can create your own tactile sensors by inheriting from `BaseSensor`.  A sens
 
 
 
-## Documentation
-
-TODO: PUSH GENERATED DOC BY SPHINX TO READTHEDOCS.
-
-Detailed documentation for each component and operation can be found at [Documentation Link].
-
-
-### Building Documentations Locally
-
-1. Install Sphinx:  
-    ```bash
-    pip install sphinx sphinx-autobuild
-    ```
-1. Navigate to `docs` and build:
-    ```bash
-    cd docs && make html
-    ```
-1. View the generated docs in build/html/index.html.
 
 
 ## References
