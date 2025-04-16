@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from abc import ABC,abstractmethod
 from typing import Dict, List, Tuple, Union
 
-class BaseVSFMetaPriorFactory(ABC):
+class BaseVSFStructuredPriorFactory(ABC):
     """A base class for a meta prior that determines a latent per-vsf
     material distribution.
 
@@ -35,10 +35,6 @@ class BaseVSFMetaPriorFactory(ABC):
     a 1-D variable, S would be 1[sx1], and A would be the (N x s) indicator variable
     for each region.
     """
-    @abstractmethod
-    def meta_prior(self) -> BaseContexualPrior:
-        """Returns the prior for the latent space psi."""
-        raise NotImplementedError()
 
     @abstractmethod
     def phi_prior(self, vsf : BaseVSF, features : Dict[str,torch.Tensor]=None, material_param='stiffness') -> ParamDistribution:
@@ -56,7 +52,7 @@ class BaseVSFMetaPriorFactory(ABC):
         raise NotImplementedError()
 
 
-class HomogeneousVSFMetaPriorFactory(BaseVSFMetaPriorFactory):
+class HomogeneousVSFPriorFactory(BaseVSFStructuredPriorFactory):
     """A meta prior factory that assumes a homogeneous stiffness
     distribution over the VSF.
     
@@ -70,9 +66,6 @@ class HomogeneousVSFMetaPriorFactory(BaseVSFMetaPriorFactory):
             if feature_keys is None:
                 feature_keys = []
             self.prior = LearnableVSFPriorFactory(feature_keys,mean_or_gaussian_prior)
-
-    def meta_prior(self) -> LearnableContextualPrior:
-        return self.prior
     
     def phi_prior(self, vsf : PointVSF, features : Dict[str,torch.Tensor]=None, material_param='stiffness') -> ParamDistribution:
         """Returns the prior for the latent space phi."""
@@ -94,7 +87,7 @@ class HomogeneousVSFMetaPriorFactory(BaseVSFMetaPriorFactory):
         return torch.ones(vsf.rest_points.size(0),1,device=vsf.rest_points.device)
 
 
-class SegmentationVSFMetaPriorFactory(BaseVSFMetaPriorFactory):
+class SegmentationVSFPriorFactory(BaseVSFStructuredPriorFactory):
     """A meta prior factory that segments a VSF into different regions and
     learns a stiffness distribution for each region.
     
@@ -119,9 +112,6 @@ class SegmentationVSFMetaPriorFactory(BaseVSFMetaPriorFactory):
         self.prior = LearnableVSFPriorFactory(prior_feature_keys,prior)
         self.homogeneous_segment = homogeneous_segment
         self.segment_feature = segment_feature
-    
-    def meta_prior(self) -> LearnableContextualPrior:
-        return self.prior.prior
 
     def phi_prior(self, vsf : PointVSF, features : Dict[str,torch.Tensor]=None, material_param='stiffness') -> ParamDistribution:
         """Returns the prior for the latent space phi."""
