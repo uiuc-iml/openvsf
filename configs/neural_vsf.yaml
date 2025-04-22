@@ -2,8 +2,8 @@
 dataset: !include ../demo_data/datasets/punyo_dataset_config.yaml
 # dataset: !include ../demo_data/datasets/joint_torques_dataset_config.yaml
 
-# world: !include worlds/kinova_punyo_world.yaml
-world: !include worlds/kinova_world.yaml
+world: !include worlds/kinova_punyo_world.yaml
+# world: !include worlds/kinova_world.yaml
 
 sensors:
     punyo_force: !include sensors/punyo_force.yaml
@@ -12,7 +12,7 @@ sensors:
 simulator:
     type: quasistatic
     deformables:
-        boot:  # add an object named boot as a deformable object
+        object:  # add an object named object as a deformable object
             model:
                 type: neural
                 init_method: mesh
