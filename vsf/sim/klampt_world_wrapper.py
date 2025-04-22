@@ -152,8 +152,11 @@ class klamptWorldWrapper:
             geom = klampt.Geometry3D()
             geom.setTriangleMesh(triangle_mesh)
         else:
-            geom = klampt.Geometry3D()
-            geom.loadFile(geom_file_name)
+            # geom = klampt.Geometry3D()
+            # geom.loadFile(geom_file_name)
+            #this function should be used instead of native Klampt loaders due to a known Assimp configuration issue
+            from ..utils.klampt_utils import load_trimesh_preserve_vertices
+            geom = load_trimesh_preserve_vertices(geom_file_name)
 
         self.add_geometry(name, geom, geom_type, parent_name, parent_relative_transform)
     

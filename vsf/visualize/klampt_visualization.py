@@ -183,7 +183,7 @@ def vsf_show(vsf : Union[PointVSF,NeuralVSF],
         if isinstance(stiffness_values,str) and stiffness_values == 'auto':
             #correction of 20 ^ (1/3) is used to scale between 1k and 20k
             stiffness_neural = nvg.getValues().flatten()
-            lb = 0.01
+            lb = 1e2
             stiffness_values = autodetect_stiffness_values((stiffness_neural),lb=lb,scales=[1.0]).tolist()
             print("vsf_show: Using the following stiffness values:",stiffness_values)
         

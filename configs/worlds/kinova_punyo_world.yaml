@@ -3,10 +3,9 @@ kinova:
   file_name: !relative_path ../../knowledge/robot_model/kinova_gen3.urdf
 punyo:
   type: deformable
-  file_name: !relative_path ../../knowledge/robot_model/punyo_mesh_complete.ply
+  file_name: !relative_path ../../knowledge/robot_model/punyo_mesh_partial.ply
   parent_name: EndEffector_Link
-  parent_relative_transform: [[0.0, -1.0, 0.0, 0.0], [-0.05582150, 0.0, -0.9984407, 0.02111], 
-                              [0.99844076, 0.0, -0.0558215, 0.096142], [0.0, 0.0, 0.0, 1.0]]
-  file_name: !relative_path ../../knowledge/punyo/punyo_ref_mesh.ply
+  parent_relative_transform: [[0.0, -1.0, 0.0, 0.0], [0.34202014, 0.0, -0.93969262, 0.02111], 
+                              [0.93969262, 0.0, 0.34202014, 0.096142], [0.0, 0.0, 0.0, 1.0]]
 
 
