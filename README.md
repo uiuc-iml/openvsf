@@ -95,7 +95,7 @@ A `PointVSF` instance can be loaded from / saved to a Numpy archive (npz) file o
 
 A `NeuralVSF` instance can be loaded from / saved to a Pytorch file (extension `.pt`).
 
-Either type is naturally loaded with the `model.vsf_load(file_or_folder)` function.  You can then call `model.save(file_or_folder)` to save it to disk.
+Either type is naturally loaded with the `model.load(file_or_folder)` function.  You can then call `model.save(file_or_folder)` to save it to disk.
 
 A *dataset* consists of a list of sequences, where each sequence is a list of dictionaries mapping strings to Numpy arrays.  Each sequence can have its own length and contents, but at a minimum should contain a set of *controls* and a set of *sensor observations*.  Missing controls and sensors are not currently supported.
 
