@@ -155,7 +155,7 @@ It is helpful for estimation to start with a general sense of the material distr
 
 A *prior factory* is an object that instantiates priors for a given VSF model.  The simplest initialization is to assign a uniform Gaussian distribution, which is what the standard `GaussianVSFPriorFactory` does.  However, if you want to do something more sophisticated, you can meta-learn a function that maps each point's features to its stiffness distribution.  The `LearnableVSFPriorFactory` will let you such a function if you have estimated multiple VSF models. 
 
-To learn priors, you will set up a PyTorch `torch.nn.Module` mapping a BxF batch of features to a length-B batch of scalar means, and another module mapping features to variance.  Then, you will construct the prior with `prior = LearnableVSFPriorFactory(feature_keys,TorchContextualPrior(mean_module,var_module))`.  Calling `prior.meta_learn([vsf1,vsf2,...])` will then learn the prior from the previously estimated VSFs.
+To learn priors, you will set up a PyTorch `torch.nn.Module` mapping a BxF batch of features to a length-B batch of scalar means, and another module mapping features to variance.  Then, you will construct the prior with `prior = LearnableVSFPriorFactory(feature_keys,TorchConditionalDistribution(mean_module,var_module))`.  Calling `prior.meta_learn([vsf1,vsf2,...])` will then learn the prior from the previously estimated VSFs.
 
 > **Note**: Make sure that the feature keys are all present in the VSFs' features, and that the shape of the concatenated feature tensor is NxF. 
 
