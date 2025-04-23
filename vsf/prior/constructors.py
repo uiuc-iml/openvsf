@@ -1,5 +1,5 @@
 from .prior_factory import BaseVSFPriorFactory, GaussianVSFPriorFactory, LearnableVSFPriorFactory
-from .prior import BaseContexualPrior, LearnableContextualPrior, GaussianContextualPrior
+from .conditional_distribution import BaseConditionalDistribution, LearnableConditionalDistribution, GaussianConditionalDistribution
 from typing import Dict, List
 from dataclasses import dataclass, field
 
@@ -24,11 +24,11 @@ class PointVSFPriorConfig(PriorConfig):
     """A configuration for a prior factory."""
     feature_keys : List[str] = field(default_factory=list)  # feature keys for the prior
     
-def make_prior(config: PriorConfig) -> BaseContexualPrior:
+def make_prior(config: PriorConfig) -> BaseConditionalDistribution:
     if config.type == 'gaussian':
-        return GaussianContextualPrior(config.mu,config.var)
+        return GaussianConditionalDistribution(config.mu,config.var)
     elif config.type == 'linear_gaussian':
-        from .prior import LinearGaussianPrior,LinearGaussianPriorConfig
+        from .conditional_distribution import LinearGaussianPrior,LinearGaussianPriorConfig
         return LinearGaussianPrior(LinearGaussianPriorConfig(c_dim=config.c_dim,diag=config.diag,mu_init=config.mu,var_init=config.var))
     raise ValueError("Unknown prior type "+config.type)
 
