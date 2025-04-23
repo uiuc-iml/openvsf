@@ -16,7 +16,7 @@ from ..sim.quasistatic_sim import QuasistaticVSFSimulator
 from ..sensor.base_sensor import ContactState, SimState
 from ..sensor.base_calibrator import BaseCalibrator
 from ..prior.prior_factory import BaseVSFPriorFactory
-from ..prior.meta_prior_factory import BaseVSFMetaPriorFactory
+from ..prior.structured_prior_factory import BaseVSFStructuredPriorFactory
 from .base_material_estimator import BaseVSFMaterialEstimator
 from .recursive_optimizer import SGDEstimator,DiagonalEKF,DenseEKF,ObservationLinearization
 from .quad_prog_optimizer import QuadProgOptimizer
@@ -48,7 +48,7 @@ class PointVSFEstimator(BaseVSFMaterialEstimator):
     It can accept a prior and a meta-prior to help guide the estimation.
     """
     def __init__(self, config: PointVSFEstimatorConfig, 
-                 prior : BaseVSFPriorFactory, meta_prior : BaseVSFMetaPriorFactory = None):
+                 prior : BaseVSFPriorFactory, meta_prior : BaseVSFStructuredPriorFactory = None):
         self.config = config
         self.prior = prior
         self.meta_prior = meta_prior
