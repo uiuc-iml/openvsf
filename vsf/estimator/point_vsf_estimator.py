@@ -45,7 +45,21 @@ class PointVSFEstimator(BaseVSFMaterialEstimator):
     """
     A class that estimates a PointVSF stiffness field.
 
-    It can accept a prior and a meta-prior to help guide the estimation.
+    It can accept a prior factory and a meta-prior to help guide the estimation.
+    
+    Very important!!! This class has VSF object and simulators, but they ARE NOT attached 
+    to the estimator, it is only a pointer to the recent VSF. When you would to estimate 
+    a new VSF, you need to call the online_init function to refresh the pointer to the VSF. 
+    Batch estimation will refresh the VSF pointer automatically when using the batch_estimate 
+    function.
+    
+    Attributes:
+        config (PointVSFEstimatorConfig): Configuration for the estimator.
+        prior_factory (BaseVSFPriorFactory): Prior factory for the estimator.
+        struct_prior_factory (BaseVSFStructuredPriorFactory): Structured prior factory for the estimator.
+        vsf (PointVSF): Temporary reference to the VSF object being estimated.
+        vsf_sim (QuasistaticVSFSimulator): Temporary reference to the simulator object used for estimation.
+        estimator: The optimizer used for estimation.
     """
     def __init__(self, config: PointVSFEstimatorConfig, 
                  prior : BaseVSFPriorFactory, meta_prior : BaseVSFStructuredPriorFactory = None):
