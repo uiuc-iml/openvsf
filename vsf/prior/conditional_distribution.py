@@ -6,15 +6,15 @@ from abc import ABC,abstractmethod
 from typing import Dict, List, Union
 
 
-class BaseContexualPrior(ABC):
+class BaseConditionalDistribution(ABC):
     """
-    A base class for a contextual prior that predicts the prior of a
-    generic scalar given a context tensor.
+    A base class for a conditional distribution that predicts the distribution 
+    of a generic vector given a feature tensor.
     
     The contextual prior works on fixed-dimensional input features and 
     output material parameters.  
     
-    Inputs to the contextual prior can be in a batch form,
+    Inputs to the conditional distribution can be in a batch form,
     i.e., a B x F tensor, where B is the batch size and F is the dimension 
     of the features.  The output of the contextual prior is a distribution
     over the material parameters.
@@ -45,8 +45,8 @@ class BaseContexualPrior(ABC):
         raise NotImplementedError()
 
 
-class LearnableContextualPrior(BaseContexualPrior):
-    """A contextual prior that can be learned from data.
+class LearnableConditionalDistribution(BaseConditionalDistribution):
+    """A conditional distribution that can be learned from data.
 
     It is assumed that the predict function is differentiable through torch.
     """
@@ -91,7 +91,7 @@ class LearnableContextualPrior(BaseContexualPrior):
         raise NotImplementedError()
 
 
-class GaussianContextualPrior(LearnableContextualPrior):
+class GaussianConditionalDistribution(LearnableConditionalDistribution):
     """A contextual prior that predicts the mean and variance of the output.
     
     The mean and variance are learned through simple estimation.  This also
@@ -109,7 +109,7 @@ class GaussianContextualPrior(LearnableContextualPrior):
         return [self.mean, self.var]
     
     def learn_increment(self, context : torch.Tensor, target : torch.Tensor, weight : torch.Tensor = None):
-        raise NotImplementedError("GaussianContextualPrior does not support incremental learning")
+        raise NotImplementedError("GaussianConditionalDistribution does not support incremental learning")
 
     def predict(self, context:torch.Tensor) -> ParamDistribution:
         ones = torch.ones(context.size(0), device=context.device)
@@ -153,8 +153,8 @@ class TorchLearnConfig:
     lr_decay_min : float = 1e-6
 
 
-class TorchContextualPrior(LearnableContextualPrior):
-    """A contextual prior that uses two torch modules to predict the mean and
+class TorchConditionalDistribution(LearnableConditionalDistribution):
+    """A conditional distribution that uses two torch modules to predict the mean and
     variance of the material parameters.
 
     Args:
@@ -277,7 +277,7 @@ class TorchContextualPrior(LearnableContextualPrior):
 
 @dataclass
 class LinearGaussianPriorConfig:
-    """A configuration for a linear Gaussian meta prior."""
+    """A configuration for a linear Gaussian conditional distribution."""
     c_dim:int = None
     diag:bool = False
     non_neg:bool = False
@@ -285,9 +285,9 @@ class LinearGaussianPriorConfig:
     mu_init:float = 1e-2
     var_init:float = 1.0
 
-class LinearGaussianPrior(TorchContextualPrior):
+class LinearGaussianPrior(TorchConditionalDistribution):
     """A meta-prior that predicts the material parameters as a linear
-    function of the named features plus a gaussian uncertainty.
+    function of the named features plus a constant gaussian uncertainty.
     """
     def __init__(self, config : LinearGaussianPriorConfig) -> None:
         self.config = config
@@ -384,7 +384,7 @@ class MLP(nn.Module):
             out = self.non_neg_layer(out)
         return out
 
-class MlpContextualPrior(TorchContextualPrior):
+class MlpConditionalDistribution(TorchConditionalDistribution):
 
     def __init__(self, c_dim:int=None, dim_lst:list[int]=None, 
                  tsr_params:dict={}, non_neg:bool=False, add_bn:bool=True, 
@@ -430,7 +430,7 @@ class MlpContextualPrior(TorchContextualPrior):
         self.mlp.load_state_dict(params_dict)
 
 
-class DeepKernelContexualPrior(TorchContextualPrior):
+class DeepKernelConditionalDistribution(TorchConditionalDistribution):
 
     def __init__(self, c_dim:int=None, dim_lst:list[int]=None, 
                  tsr_params:dict={}, non_neg:bool=False) -> None:
