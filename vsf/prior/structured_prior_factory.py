@@ -1,6 +1,6 @@
 import torch
 from .prior_factory import LearnableVSFPriorFactory
-from .prior import LearnableContextualPrior, BaseContexualPrior, GaussianContextualPrior
+from .conditional_distribution import LearnableConditionalDistribution, BaseConditionalDistribution, GaussianConditionalDistribution
 from .distribution import ParamDistribution, DiagGaussianDistribution
 from ..core.base_vsf import BaseVSF
 from ..core.point_vsf import PointVSF
@@ -57,11 +57,11 @@ class HomogeneousVSFPriorFactory(BaseVSFStructuredPriorFactory):
     distribution over the VSF.
     
     The constructor can take in a mean and variance for the prior,
-    or a LearnableContextualPrior.
+    or a LearnableConditionalDistribution.
     """
-    def __init__(self, mean_or_gaussian_prior : Union[float,LearnableContextualPrior], var : float = 1.0, feature_keys:List[str]=None):
+    def __init__(self, mean_or_gaussian_prior : Union[float,LearnableConditionalDistribution], var : float = 1.0, feature_keys:List[str]=None):
         if isinstance(mean_or_gaussian_prior,float):
-            self.prior = LearnableVSFPriorFactory([],GaussianContextualPrior(mean_or_gaussian_prior, var))
+            self.prior = LearnableVSFPriorFactory([],GaussianConditionalDistribution(mean_or_gaussian_prior, var))
         else:
             if feature_keys is None:
                 feature_keys = []
@@ -103,7 +103,7 @@ class SegmentationVSFPriorFactory(BaseVSFStructuredPriorFactory):
     to predict the stiffness distribution.  If None, then the prior is assumed
     not contextual.
     """
-    def __init__(self, prior : LearnableContextualPrior,
+    def __init__(self, prior : LearnableConditionalDistribution,
                  homogeneous_segment : bool = True,
                  segment_feature  = 'segment',
                  prior_feature_keys : List[str] = None):
