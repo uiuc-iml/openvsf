@@ -7,8 +7,19 @@ from typing import Dict, List, Union
 
 
 class BaseContexualPrior(ABC):
-    """A base class for a contextual prior that predicts the prior of a
-    generic scalar given a context tensor."""
+    """
+    A base class for a contextual prior that predicts the prior of a
+    generic scalar given a context tensor.
+    
+    The contextual prior works on fixed-dimensional input features and 
+    output material parameters.  
+    
+    Inputs to the contextual prior can be in a batch form,
+    i.e., a B x F tensor, where B is the batch size and F is the dimension 
+    of the features.  The output of the contextual prior is a distribution
+    over the material parameters.
+
+    """
     @abstractmethod
     def predict(self, context:torch.Tensor) -> ParamDistribution:
         """Predicts the output for a properly-shaped context tensor.
@@ -57,7 +68,11 @@ class LearnableContextualPrior(BaseContexualPrior):
     @abstractmethod
     def parameters(self) -> list:
         """Returns the torch parameters that can be optimized, i.e., same as
-        torch.nn.Module.parameters()."""
+        torch.nn.Module.parameters().
+        
+        NOTE: this function is expected to return references of the parameters,
+        different from state_dict() which returns copies of the parameters.
+        """
         raise NotImplementedError()
 
     @abstractmethod
@@ -97,8 +112,8 @@ class GaussianContextualPrior(LearnableContextualPrior):
         raise NotImplementedError("GaussianContextualPrior does not support incremental learning")
 
     def predict(self, context:torch.Tensor) -> ParamDistribution:
-        return DiagGaussianDistribution(torch.full((context.size(0),),self.mean,device=context.device),
-                                        torch.full((context.size(0),),self.var,device=context.device))
+        ones = torch.ones(context.size(0), device=context.device)
+        return DiagGaussianDistribution(self.mean*ones, self.var*ones)
     
     def to(self, device):
         self.mean.to(device)
