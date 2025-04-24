@@ -151,3 +151,15 @@ def test_config_dataclass():
     assert isinstance(cfg, PointVSFConfig)
     assert cfg.voxel_size == 0.1
     assert cfg.axis_mode == 'anisotropic'
+    
+
+def test_subset_indices():
+    points = make_cube_points(3)
+    features = {'mass': torch.tensor([1.0, 2.0, 3.0])}
+    vsf = PointVSF(rest_points=points, axis_mode='axis_aligned', features=features)
+    indices = torch.tensor([0, 2], dtype=torch.long)
+    vsf_subset = vsf[indices]
+    assert vsf_subset.rest_points.shape[0] == 2
+    assert torch.allclose(vsf_subset.rest_points, points[indices, :])
+    assert torch.allclose(vsf_subset.stiffness, vsf.stiffness[indices])
+    assert torch.allclose(vsf_subset.features['mass'], features['mass'][indices])
