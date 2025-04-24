@@ -153,6 +153,35 @@ class PointVSF(BaseVSF):
                 assert name in self.features, f"Feature {name} not found"
                 features_list.append(self.features[name].reshape(N, -1))
         return torch.stack(features_list, dim=1)
+    
+    def __getitem__(self, idx: Union[list, np.ndarray, torch.Tensor]) -> "PointVSF":
+        """
+        Return a subset of the PointVSF object corresponding to the provided indices.
+
+        Args:
+            idx (Union[list, np.ndarray, torch.Tensor]): Indices to subset the PointVSF. 
+                Must be 1D and index along the primary point axis.
+
+        Returns:
+            PointVSF: A new PointVSF instance containing only the selected points.
+        """
+        if isinstance(idx, list):
+            idx = torch.tensor(idx)
+        elif isinstance(idx, np.ndarray):
+            idx = torch.from_numpy(idx)
+        assert isinstance(idx, torch.Tensor)
+        assert idx.ndim == 1
+        assert idx.size(0) <= len(self.rest_points)
+        new_rest_points = self.rest_points[idx, :]
+        new_stiffness = self.stiffness[idx]
+        new_features = {k: v[idx] for k, v in self.features.items()}
+        vsf_subset = PointVSF(
+            rest_points=new_rest_points,
+            axis_mode=self.axis_mode,
+            features=new_features
+        )
+        vsf_subset.stiffness = new_stiffness
+        return vsf_subset
 
     def save(self, path: str):
         """Saves to either a folder or a Numpy archive (npz) file."""
