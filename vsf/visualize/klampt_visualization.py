@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+import time
 from klampt import ImplicitSurface, PointCloud, Geometry3D, GeometricPrimitive
 from .. import PointVSF, NeuralVSF
 from ..sim import QuasistaticVSFSimulator
@@ -67,7 +68,9 @@ def visualize_stiffness_volume(vg : ImplicitSurface, stiffness_values : List[flo
         vis.add("mesh_"+str(i),m,appearance=a,hide_label=True,draw_order=-i)
 
     vis.autoFitCamera()
-    vis.loop()
+    vis.show()
+    while vis.shown():
+        time.sleep(0.1)
     vis.scene().clear()
     
 
@@ -192,7 +195,9 @@ def vsf_show(vsf : Union[PointVSF,NeuralVSF],
             geom = Geometry3D(pc)
             vis.add("pc",geom,hide_label=True,pointSize=5.0)
             vis.autoFitCamera()
-            vis.loop()
+            vis.show()
+            while vis.shown():
+                time.sleep(0.1)
             vis.scene().clear()
         else:
             visualize_stiffness_volume(nvg,stiffness_values, cmap=cmap)
@@ -237,7 +242,9 @@ def vsf_show(vsf : Union[PointVSF,NeuralVSF],
             geom = Geometry3D(pc)
             vis.add("pc",geom,hide_label=True,pointSize=5.0)
             vis.autoFitCamera()
-            vis.loop()
+            vis.show()
+            while vis.shown():
+                time.sleep(0.1)
             vis.scene().clear()
             return
         else:
