@@ -1,6 +1,7 @@
 from ..sim.quasistatic_sim import QuasistaticVSFSimulator
 from ..dataset import BaseDataset,DatasetConfig
 from ..sensor.base_calibrator import BaseCalibrator
+from ..utils.data_utils import remap_dict_in_seq
 from typing import Dict, List, Tuple
 import numpy as np
 
@@ -18,16 +19,16 @@ def predict_sensors(sim : QuasistaticVSFSimulator,
         each a map from the sensor name to the TxN measurement sequence where T is
         the length of the sequence.
     """
+    control_keys = dataset_metadata.control_keys if len(dataset_metadata.control_keys) != 0 else sim.get_control_keys()
+    sensor_keys = dataset_metadata.sensor_keys if len(dataset_metadata.sensor_keys) != 0 else sim.get_sensor_keys()
+    
     observed = [{} for _ in range(len(dataset))]
     predicted = [{} for _ in range(len(dataset))]
     for i,seq in enumerate(dataset):
         if verbose:
             print(f'Processing sequence {i} in dataset {len(dataset)}')
-        control_seq = []
-        sensor_seq = []
-        for frame in seq:
-            control_seq.append({k:frame[v] for k,v in dataset_metadata.control_keys.items()})
-            sensor_seq.append({k:frame[v] for k,v in dataset_metadata.sensor_keys.items()})
+
+        control_seq, sensor_seq = remap_dict_in_seq(seq, control_keys, sensor_keys)
 
         sim.reset()
         n = 0

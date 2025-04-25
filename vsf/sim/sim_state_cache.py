@@ -6,6 +6,7 @@ import json
 from .quasistatic_sim import QuasistaticVSFSimulator
 from ..dataset import BaseDataset,DatasetConfig
 from ..utils.perf import PerfRecorder, DummyRecorder
+from ..utils.data_utils import remap_dict_in_seq
 from ..sensor.base_calibrator import BaseCalibrator
 from ..sensor.base_sensor import ContactState, SimState
 
@@ -131,11 +132,11 @@ class SimStateCache(BaseDataset):
                         dt = 0.1) -> List[Dict,str,np.ndarray]:
         """Creates a new sequence in the cache corresponding to a
         dataset sequence."""
-        control_seq = []
-        sensor_seq = []
-        for frame in seq:
-            control_seq.append({k:frame[v] for k,v in dataset_metadata.control_keys.items()})
-            sensor_seq.append({k:frame[v] for k,v in dataset_metadata.sensor_keys.items()})
+    
+        control_keys = dataset_metadata.control_keys if len(dataset_metadata.control_keys) != 0 else self.sim.get_control_keys()
+        sensor_keys = dataset_metadata.sensor_keys if len(dataset_metadata.sensor_keys) != 0 else self.sim.get_sensor_keys()
+
+        control_seq, sensor_seq = remap_dict_in_seq(seq, control_keys, sensor_keys)
     
         self.sim.reset()
         n = 0
