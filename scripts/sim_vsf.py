@@ -19,6 +19,7 @@ from vsf.dataset.constructors import DatasetConfig, dataset_from_config
 from vsf.visualize.klampt_visualization import add_sim_to_vis
 from vsf.utils.perf import PerfRecorder
 from vsf.utils.config_utils import load_config_recursive
+from vsf.utils.data_utils import remap_dict_in_seq
 
 DRAW_NORMALS = False
 DRAW_SPRINGS = False
@@ -38,17 +39,15 @@ def simulate_dataset(sim : QuasistaticVSFSimulator, dataset, dataset_config : Da
     else:
         sim_cache = None
     dt = 0.1
+    
+    control_keys = dataset_config.control_keys if len(dataset_config.control_keys) != 0 else sim.get_control_keys()
+    sensor_keys = dataset_config.sensor_keys if len(dataset_config.sensor_keys) != 0 else sim.get_sensor_keys()        
 
     perfer.start('all')
     for seq in dataset:
         sim.reset()
         #extract the controls and observations from this sequence
-        control_seq = []
-        observation_seq = []
-        for step_idx in range(len(seq)):
-            frame_data = seq[step_idx]
-            control_seq.append({k:frame_data[v] for k,v in dataset_config.control_keys.items()})
-            observation_seq.append({k:frame_data[v] for k,v in dataset_config.sensor_keys.items()})
+        control_seq, observation_seq = remap_dict_in_seq(seq, control_keys, sensor_keys)
 
         #calibrate the sensors from the sequences
         ncalibrate = 0
