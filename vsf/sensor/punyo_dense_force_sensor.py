@@ -125,10 +125,10 @@ class PunyoDenseForceSensor(BaseSensor):
         
         forces = torch.zeros((len(self.vertices),3), **tsr_params)
         for body,contact_state in zip(bodies,contact_states):
-            if len(contact_state.elems1) > 0:
+            if contact_state.elems1 is not None and len(contact_state.elems1) > 0:
                 assert len(contact_state.elems1) == len(contact_state.points)
                 forces[contact_state.elems1, :] += transform_directions(contact_state.forces, Rlocal)
-            elif len(contact_state.elems2) > 0:
+            elif contact_state.elems2 is not None and len(contact_state.elems2) > 0:
                 assert len(contact_state.elems2) == len(contact_state.points)
                 # transform points to local coordinates
                 points_local = transform_points(contact_state.points, Hlocal)
@@ -155,10 +155,10 @@ class PunyoDenseForceSensor(BaseSensor):
         jacs = {}
         for body,contact_state in zip(bodies,contact_states):
             J = torch.zeros((len(self.vertices)*3, len(contact_state.points), 3), **tsr_params)
-            if len(contact_state.elems1) > 0:
+            if contact_state.elems1 is not None and len(contact_state.elems1) > 0:
                 for c,i in enumerate(contact_state.elems1):
                     J[3*i:3*(i+1),c,:] = Rlocal
-            elif len(contact_state.elems2) > 0:
+            elif contact_state.elems2 is not None and len(contact_state.elems2) > 0:
                 # transform points to local coordinates
                 points_local = transform_points(contact_state.points, Hlocal)
                 # barycentric weights
