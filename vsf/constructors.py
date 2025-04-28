@@ -160,7 +160,7 @@ def vsf_from_mesh(mesh : Union[str,klampt.TriangleMesh],
         return NeuralVSF(config, sdf=sdf)
     elif vsf_type == 'point':
         config = PointVSFConfig(bbox=[aabb[0],aabb[1]], voxel_size=1.0/grid_size)
-        rest_points = sdf_to_points(sdf, aabb[1], aabb[0], thresh=sdf_thres)        
+        rest_points = sdf_to_points(sdf, aabb[0], aabb[1], thresh=sdf_thres)        
         return PointVSF(rest_points, config)
 
 def vsf_from_rgbd(rgb_image : np.ndarray, depth_image : np.ndarray, bmin : np.ndarray, bmax : np.ndarray,
