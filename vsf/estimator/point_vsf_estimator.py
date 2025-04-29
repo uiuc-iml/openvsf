@@ -96,8 +96,10 @@ class PointVSFEstimator(BaseVSFMaterialEstimator):
         if vsf.axis_mode != 'isotropic':
             raise NotImplementedError("Only isotropic axis mode is supported for now")
         num_material_params = vsf.stiffness.reshape(-1).size(0)
-        stiffness_dist = self.prior_predict(vsf)
-        mu, std = stiffness_dist.param_mean(), stiffness_dist.param_std()
+        # disable gradient during the prior prediction
+        with torch.no_grad():
+            stiffness_dist = self.prior_predict(vsf)
+            mu, std = stiffness_dist.param_mean(), stiffness_dist.param_std()
         assert mu.size(0) == num_material_params
         assert std.size(0) == num_material_params
         assert mu.shape == (vsf.rest_points.size(0), ), "can only handle isotropic stiffness for now"
