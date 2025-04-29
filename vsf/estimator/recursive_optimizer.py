@@ -81,6 +81,111 @@ class ObservationLinearization:
         if self.state_indices is not None:
             self.state_indices.to(device)
         return self
+    
+    @staticmethod
+    def merge(*obs_models : 'ObservationLinearization') -> 'ObservationLinearization':
+        """
+        Merge multiple sparse linear observation models into one obsernation model.
+
+        This method takes a list of `ObservationLinearization` objects, each of
+        which may observe only a subset of the full state, the return will have 
+        a single merged observation model with the following properties: 
+            
+            matrix: single merged observation matrix of shape
+            (sum_i n_obs_i, n_unique_state_indices),
+            bias: concatenated bias vector of shape (sum_i n_obs_i,),
+            var: concatenated variance vector of shape (sum_i n_obs_i,),
+            state_indices: 1D array of the sorted unique state indices.
+
+        Internally, it uses `np.unique(..., return_inverse=True)` on the
+        concatenated state index lists to compute the overall state dimension
+        and to map each submatrix into the correct columns of the merged
+        matrix.
+
+        Args:
+
+            obs_models : List[ObservationLinearization]
+                List of sparse observation models to merge. Each must have
+                `.matrix` (Tensor), `.var` (Tensor or scalar), optional
+                `.bias` (Tensor), and optional `.state_indices` (1D Tensor).
+                If `state_indices is None`, the model is assumed to act on the
+                full state vector of size `matrix.size(1)`.
+
+        Returns:
+
+            merged_obs : ObservationLinearization
+                A new observation model whose
+                - `merged_obs.matrix` is shape `(total_meas, n_unique)`,
+                - `merged_obs.bias`  is shape `(total_meas,)`,
+                - `merged_obs.var`   is shape `(total_meas,)` (variances),
+                - `merged_obs.state_indices` is a 1D LongTensor of length `n_unique`.
+                `merged_obs.state_indices[i]` gives the original state index
+                corresponding to column `i` of `merged_obs.matrix`.
+            merged_measurement: np.ndarray
+                An array of shape `(total_meas,)` containing the concatenated
+                measurements from all models. The order of the measurements
+                corresponds to the order of the rows in `merged_obs.matrix`,
+                which is the order in the measurement_list.
+
+        """
+        # 0) convert to list if a single model is passed
+        obs_models = list(obs_models)
+        
+        # 1) how many rows each model contributes
+        num_meas_list = [model.matrix.shape[0] for model in obs_models]
+        total_meas = sum(num_meas_list)
+        
+        tsr_params = { 'dtype': obs_models[0].matrix.dtype, 
+                       'device': obs_models[0].matrix.device }
+
+        # 2) gather all state_indices as one long array
+        state_idx_lists = [
+            (obs.state_indices.numpy() if obs.state_indices is not None
+            else np.arange(obs.matrix.size(1)))
+            for obs in obs_models
+        ]
+        all_state_idxs = np.concatenate(state_idx_lists)
+
+        # compute unique indices + inverse map
+        unique_indices, inverse = np.unique(all_state_idxs, return_inverse=True)
+        # split inverse back per-model
+        splits = np.cumsum([len(idx) for idx in state_idx_lists])[:-1]
+        per_model_inverse = np.split(inverse, splits)
+
+        # 3) build merged observation matrix
+        merged_matrix = torch.zeros((total_meas, len(unique_indices)), **tsr_params)
+        
+        # row block boundaries
+        row_ends = np.cumsum(num_meas_list)
+        row_starts = np.concatenate([[0], row_ends[:-1]])
+
+        for (obs, r0, r1, inv_idx) in zip(
+            obs_models, row_starts, row_ends, per_model_inverse
+        ):
+            # obs.matrix is shape (n_obs_i, len(inv_idx))
+            merged_matrix[r0:r1, inv_idx] = obs.matrix
+        
+        # 4) merge biases (fill with zeros if None)
+        merged_bias = torch.cat([
+            (obs.bias if obs.bias is not None else torch.zeros(n, **tsr_params))
+            for obs, n in zip(obs_models, num_meas_list) ], dim=0)
+
+        # 5) merge variances as vector of diag elements
+        # TODO: support merging full covariance matrices
+        merged_var = torch.cat([obs.diag_var() for obs in obs_models], dim=0)
+
+        # wrap in a new ObservationLinearization
+        merged_state_tensor = torch.tensor(unique_indices,
+                                           device=tsr_params['device'],
+                                           dtype=torch.long)
+        merged_obs = ObservationLinearization(
+            matrix=merged_matrix,
+            var=merged_var,
+            bias=merged_bias,
+            state_indices=merged_state_tensor
+        )
+
+        return merged_obs
 
 
 def diag_AtB(A : torch.Tensor, B: torch.Tensor) -> torch.Tensor:
