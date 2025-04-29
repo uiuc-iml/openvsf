@@ -68,7 +68,7 @@ def simulate_dataset(sim : QuasistaticVSFSimulator, dataset, dataset_config : Da
             perfer.start('sim')
             sim.step(control_seq[step_idx],dt)
 
-            if step_idx >= n:
+            if step_idx >= ncalibrate:
                 predictions = sim.measurements()
                 if sim_cache is not None:
                     perfer.start('save_sim_data')
