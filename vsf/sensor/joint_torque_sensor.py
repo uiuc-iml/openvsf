@@ -88,11 +88,13 @@ class JointTorqueSensor(BaseSensor):
         G = self.robot.getGravityForces(self.gravity)  #assumes robot config is updated
         joint_torques = -torch.tensor([G[self.robot.link(n).index] for n in self.link_names],device=device)
         if self.tare is not None:
+            tare_tensor = torch.from_numpy(self.tare).to(device)
             # subtract the tare value
             if self.gravity_pred_at_tare is None:
                 #the tare value includes gravity, so we need to subtract the gravity
                 self.gravity_pred_at_tare = joint_torques
-            joint_torques += torch.from_numpy(self.tare).to(device) - self.gravity_pred_at_tare
+            gravity_pred_tensor = torch.from_numpy(self.gravity_pred_at_tare).to(device)
+            joint_torques += tare_tensor - gravity_pred_tensor
         for link_name_i in self.collision_links:
             i = self.robot.link(link_name_i).index
             contact_points, contact_forces = state.contacts_on_body(link_name_i, local=False)
