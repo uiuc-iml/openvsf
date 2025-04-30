@@ -12,7 +12,7 @@ sensors:
 simulator:
     type: quasistatic
     deformables:
-        object:  # add an object named object as a deformable object
+        vsf:  # add an object named object as a deformable object
             model:
                 type: neural
                 init_method: mesh

@@ -106,7 +106,7 @@ def vsf_from_config(config : Union[NeuralVSFConfig,PointVSFConfig,AnyVSFConfig])
             else:
                 return vsf_from_config(config.neural_vsf_config)
         elif config.init_method == 'mesh':
-            return vsf_from_mesh(config.path)
+            return vsf_from_mesh(config.path, vsf_type=config.type)
         elif config.init_method == 'factory':
             factory = VSFFactory(config.factory_config)
             geom = klampt.Geometry3D()
@@ -114,9 +114,27 @@ def vsf_from_config(config : Union[NeuralVSFConfig,PointVSFConfig,AnyVSFConfig])
                 raise RuntimeError("Unable to load geometry file "+config.path)
             return factory.process(geom)
         elif config.init_method == 'rgbd':
-            factory = VSFRGBDCameraFactory(config.rgbd_factory_config)
-            pcd = o3d.io.read_point_cloud(config.path)
-            return factory.process(pcd)
+            if config.type == 'point':
+                factory = VSFRGBDCameraFactory(config.rgbd_factory_config)
+                pcd = o3d.io.read_point_cloud(config.path)
+                return factory.process(pcd)
+            else:
+                import imageio
+                import json
+                rgb_image = imageio.imread(os.path.join(config.path, "color_img.jpg"))
+                depth_image = imageio.imread(os.path.join(config.path, "depth_img.png"))
+                depth_scale = 1000.0
+                depth_trunc = 2.0
+
+                intrinsic = json.load(open(os.path.join(config.path, "intrinsic.json")))
+                intrinsic = np.array([[intrinsic['fx'], 0, intrinsic['cx']],
+                                    [0, intrinsic['fy'], intrinsic['cy']],
+                                    [0, 0, 1]])
+                extrinsic = json.load(open(os.path.join(config.path, "extrinsic.json")))
+                extrinsic = np.array(extrinsic['cam2world'])
+                bmin, bmax = np.load(os.path.join(config.path, "aabb.npy"))
+
+                return vsf_from_rgbd(rgb_image, depth_image, bmin, bmax, intrinsic, extrinsic, depth_scale=depth_scale, depth_trunc=depth_trunc, type='neural')
         else:
             raise ValueError("Invalid init_method "+config.init_method)
     elif isinstance(config,PointVSFConfig):
