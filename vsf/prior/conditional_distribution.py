@@ -179,7 +179,10 @@ class TorchConditionalDistribution(LearnableConditionalDistribution):
     def learn(self, contexts : List[torch.Tensor], targets : List[torch.Tensor], weights : List[torch.Tensor]=None,
               learn_config=TorchLearnConfig()):
         from torch.utils.data import DataLoader
-        dataloader = DataLoader(zip(contexts,targets,weights), batch_size=learn_config.batch_size, shuffle=learn_config.shuffle)
+        from torch.utils.data import TensorDataset
+        
+        dataset = TensorDataset(torch.cat(contexts), torch.cat(targets), torch.cat(weights))
+        dataloader = DataLoader(dataset, batch_size=learn_config.batch_size, shuffle=learn_config.shuffle)
         if learn_config.optimizer == 'adam':
             optimizer = torch.optim.Adam(self.parameters(), lr=learn_config.lr, weight_decay=learn_config.weight_decay)
         elif learn_config.optimizer == 'sgd':
@@ -252,9 +255,13 @@ class TorchConditionalDistribution(LearnableConditionalDistribution):
     def load_state_dict(self,params_dict):
         self.mean_module.load_state_dict(params_dict['mean_module'])
         self.var_module.load_state_dict(params_dict['var_module'])
+    
+    def predict(self, context:torch.Tensor) -> ParamDistribution:
+        """Predicts the material parameters of the given features."""
+        return self.predict_torch(context)
 
     def predict_torch(self, context:torch.Tensor) -> ParamDistribution:
-        """Predicts the material parameters of the given dataset."""
+        """Predicts the material parameters of the given features."""
         prior_mu = self.mean_module(context)
         prior_var = self.var_module(context)
         if self.var_diag:
@@ -285,6 +292,21 @@ class LinearGaussianPriorConfig:
     mu_init:float = 1e-2
     var_init:float = 1.0
 
+class ConstantOutput(nn.Module):
+    """
+    A module that outputs constant values for all inputs.
+    
+    This module is a temprary solution to be compatible with the
+    var_module in TorchConditionalDistribution.
+    """
+    def __init__(self, constant_value: torch.Tensor):
+        super().__init__()
+        self.constant = nn.Parameter(constant_value, requires_grad=False)
+
+    def forward(self, features: torch.Tensor) -> torch.Tensor:
+        """Returns the constant value for all inputs."""
+        return self.constant.expand(features.size(0), -1).flatten()
+
 class LinearGaussianPrior(TorchConditionalDistribution):
     """A meta-prior that predicts the material parameters as a linear
     function of the named features plus a constant gaussian uncertainty.
@@ -298,14 +320,16 @@ class LinearGaussianPrior(TorchConditionalDistribution):
 
         if config.non_neg:
             non_neg = nn.LeakyReLU(negative_slope=-0.5)
-            mean_module = nn.Sequential(linear,non_neg)
+            mean_module = nn.Sequential(linear,non_neg,nn.Flatten(start_dim=0))
         else:
             mean_module = linear
         
-        if config.diag:
-            var_module = torch.full(config.c_dim,config.var_init)
-        else:
-            var_module = torch.eye(config.c_dim)*config.var_init
+        # nn.Module cannot be a torch tensor
+        # if config.diag:
+        #     var_module = torch.full((config.c_dim,),config.var_init)
+        # else:
+        #     var_module = torch.eye(config.c_dim)*config.var_init
+        var_module = ConstantOutput(torch.Tensor([config.var_init]))
         super().__init__(mean_module, var_module, config.diag)
 
     
