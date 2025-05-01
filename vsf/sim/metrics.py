@@ -74,16 +74,21 @@ def rmse_from_stats(observed: List[Dict[str,np.ndarray]], predicted:List[Dict[st
     N x M array.
     """
     assert len(observed) == len(predicted),'Mismatched number of sequences'
-    mses = {}
+    mses:Dict[str, List[np.ndarray]] = {}
     for obs,pred in zip(observed,predicted):
         assert len(obs) == len(pred),'Mismatched number of sensors'
         for sensor_name in obs:
-            assert sensor_name in pred
-            assert obs[sensor_name].shape == pred[sensor_name].shape
-            sensor_mse = np.mean((obs[sensor_name]-pred[sensor_name])**2,axis=0)
             if sensor_name not in mses:
                 mses[sensor_name] = []
-            mses[sensor_name].append(sensor_mse.tolist())
+            assert sensor_name in pred
+            if obs[sensor_name].ndim > 1:
+                num_time_steps = obs[sensor_name].shape[0]
+                obs[sensor_name] = obs[sensor_name].reshape(num_time_steps,-1)
+            assert obs[sensor_name].shape == pred[sensor_name].shape, \
+                f'Mismatched shape for sensor {sensor_name}: obs {obs[sensor_name].shape} vs pred {pred[sensor_name].shape}'
+            if len(obs[sensor_name]) > 0:
+                sensor_mse = np.mean((obs[sensor_name]-pred[sensor_name])**2,axis=0)
+                mses[sensor_name].append(sensor_mse.tolist())
     
     rmse = {}
     for sensor_name in mses.keys():
