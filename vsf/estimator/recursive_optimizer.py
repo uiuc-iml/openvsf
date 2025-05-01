@@ -319,6 +319,10 @@ class LinearRecursiveEstimator:
     def add_observation(self, model : ObservationLinearization, measurement : torch.Tensor):
         """Add an observation to the buffer."""
         assert isinstance(measurement,torch.Tensor)
+        # estimator only supports 1D measurements 
+        # so we flatten the measurement tensor
+        if measurement.ndim > 1:
+            measurement = measurement.flatten()
         assert measurement.device == model.matrix.device,'Inconsistent tensor devices in observation'
         self.obs_buffer.append((model,measurement))
 
