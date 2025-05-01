@@ -151,6 +151,16 @@ class LearnableVSFPriorFactory(BaseVSFPriorFactory):
     def train(self):
         """Enables torch autograd with respect to the model parameters."""
         self.prior.train()
+    
+    @property
+    def device(self) -> torch.device:
+        """Returns the device of the parameters."""
+        return next(self.prior.parameters()).device
+
+    @property
+    def dtype(self) -> torch.dtype:
+        """Returns the dtype of the parameters."""
+        return next(self.prior.parameters()).dtype
 
     def feature_tensor(self, vsf : BaseVSF, features : Dict[str,torch.Tensor]) -> torch.Tensor:
         """Helper: returns the feature tensor corresponding to the given keys.
