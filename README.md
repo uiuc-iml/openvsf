@@ -14,15 +14,11 @@ Core features include:
 - VSF meta-learning: priors that map feature vectors (e.g., color, visual features) to stiffness can be learned.
 - VSF physics simulation: treat VSFs as deformable assets in quasistatic physics simulators.  
 - Point <-> neural VSF convertion through "distillation".
+- Sensor model unification, point/neural VSF can run on all provided sensors (joint torque, Punyo pressure and Punyo dense force).
 - Custom robot and sensor representations
-
-TODOs BEFORE RELEASE:
-- Provide "pre-trained" VSF models in `demo_data`.
 
 Features planned soon:
 - Rigid body simulation
-- **Sensor model unification**: 
-    + run PointVSF using Punyo dense forces, add compute Jacobian in Punyo sensor class, other part should be the same (?)
 - **Efficiency optimization**: 
     + speedup neural VSF estimation by scatter dataset to vertex contact forces level
     + use sparse matrix for Punyo dense forces Jacobian
