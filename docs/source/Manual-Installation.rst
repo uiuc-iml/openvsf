@@ -11,6 +11,8 @@ Install locally in editable mode::
 Troubleshooting
 ---------------
 
+This section provides solutions to some common issues during standard pip installation process.
+
 1. Cannot install ``mesh2sdf`` due to build errors
 --------------------------------------------------
 
