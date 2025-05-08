@@ -2,7 +2,9 @@
 
 This library provides an implementation of the Volumetric Stiffness Field (VSF), a model for heterogeneous deformable objects that enables real-time estimation and simulation.  
 
-![Demo](https://imgur.com/a/3af9mg8)
+### VSF Gallery
+![Demo](https://github.com/ShaoxiongYao/shaoxiongyao.github.io/blob/a20e1381516670fc05d6ecebe80fa187d068d68b/video/vsf_gallery.gif)
+
 
 It provides two types of VSF models:
 - Point VSF: a dense set of particles attached to their reference positions with a Hookean spring.
