@@ -6,8 +6,8 @@ This library provides an implementation of the Volumetric Stiffness Field (VSF),
 
 <p align="center">
   <img src="https://github.com/ShaoxiongYao/shaoxiongyao.github.io/blob/e2f6acb4805dc5a3ef2add4302429806a46ec6b6/video/neural_vsf_estimation.gif" width=46.8% style="margin:5px;"/>
-  <img src="https://github.com/ShaoxiongYao/shaoxiongyao.github.io/blob/4723984a3bc149e1202a922f520bde1920fdb928/video/vis_neural_vsf_sim_cropped.gif" width=21.6% style="margin:5px;"/>
-  <img src="https://github.com/ShaoxiongYao/shaoxiongyao.github.io/blob/4723984a3bc149e1202a922f520bde1920fdb928/video/vis_point_vsf_sim.gif" width=31.6% style="margin:5px;"/>
+  <img src="https://github.com/ShaoxiongYao/shaoxiongyao.github.io/blob/4723984a3bc149e1202a922f520bde1920fdb928/video/vis_neural_vsf_sim_cropped.gif" width=21.5% style="margin:5px;"/>
+  <img src="https://github.com/ShaoxiongYao/shaoxiongyao.github.io/blob/4723984a3bc149e1202a922f520bde1920fdb928/video/vis_point_vsf_sim.gif" width=31.5% style="margin:5px;"/>
 </p>
 
 It provides two types of VSF models:
