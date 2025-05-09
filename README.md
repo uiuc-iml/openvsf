@@ -2,8 +2,8 @@
 
 This library provides an implementation of the Volumetric Stiffness Field (VSF), a model for heterogeneous deformable objects that enables real-time estimation and simulation.  
 
-### VSF Gallery
 ![Demo](https://github.com/ShaoxiongYao/shaoxiongyao.github.io/blob/a20e1381516670fc05d6ecebe80fa187d068d68b/video/vsf_gallery.gif)
+![Estimation](https://github.com/ShaoxiongYao/shaoxiongyao.github.io/blob/e2f6acb4805dc5a3ef2add4302429806a46ec6b6/video/neural_vsf_estimation.gif)
 
 
 It provides two types of VSF models:
@@ -299,8 +299,7 @@ You can create your own tactile sensors by inheriting from `BaseSensor`.  A sens
   doi={10.1109/ICRA48891.2023.10160731}
 }
 
-@inproceedings{
-  yao2024structured,
+@inproceedings{yao2024structured,
   title={Structured Bayesian Meta-Learning for Data-Efficient Visual-Tactile Model Estimation},
   author={Shaoxiong Yao and Yifan Zhu and Kris Hauser},
   booktitle={8th Annual Conference on Robot Learning},
