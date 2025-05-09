@@ -2,9 +2,13 @@
 
 This library provides an implementation of the Volumetric Stiffness Field (VSF), a model for heterogeneous deformable objects that enables real-time estimation and simulation.  
 
-![Demo](https://github.com/ShaoxiongYao/shaoxiongyao.github.io/blob/a20e1381516670fc05d6ecebe80fa187d068d68b/video/vsf_gallery.gif)
-![Estimation](https://github.com/ShaoxiongYao/shaoxiongyao.github.io/blob/e2f6acb4805dc5a3ef2add4302429806a46ec6b6/video/neural_vsf_estimation.gif)
+![Gallery](https://github.com/ShaoxiongYao/shaoxiongyao.github.io/blob/a20e1381516670fc05d6ecebe80fa187d068d68b/video/vsf_gallery.gif)
 
+<p align="center">
+  <img src="https://github.com/ShaoxiongYao/shaoxiongyao.github.io/blob/e2f6acb4805dc5a3ef2add4302429806a46ec6b6/video/neural_vsf_estimation.gif" height="200px" style="margin: 5px;"/>
+  <img src="https://github.com/ShaoxiongYao/shaoxiongyao.github.io/blob/82cb6f28a56811a7bce6912daa260a01e9e74a0d/video/vis_neural_vsf_sim.gif" height="200px" style="margin: 5px;"/>
+  <img src="https://github.com/ShaoxiongYao/shaoxiongyao.github.io/blob/82cb6f28a56811a7bce6912daa260a01e9e74a0d/video/vis_point_vsf_sim.gif" height="200px" style="margin: 5px;"/>
+</p>
 
 It provides two types of VSF models:
 - Point VSF: a dense set of particles attached to their reference positions with a Hookean spring.
