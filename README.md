@@ -1,7 +1,7 @@
 # Volumetric Stiffness Field (VSF) Library
 
 <div align="center">
-  <img width="500px" src="https://github.com/taichi-dev/taichi/raw/master/misc/logo.png](https://github.com/user-attachments/assets/a916cc94-1ae9-4091-b991-b287d79e3b9f"/>
+  <img width="500px" src="https://github.com/user-attachments/assets/a916cc94-1ae9-4091-b991-b287d79e3b9f"/>
 </div>
 
 This library provides an implementation of the Volumetric Stiffness Field (VSF), a model for heterogeneous deformable objects that enables real-time estimation and simulation.  
