@@ -3,6 +3,7 @@
 </div>
 
 ---
+[![Build](https://github.com/uiuc-iml/openvsf/actions/workflows/build.yml/badge.svg)](https://github.com/uiuc-iml/openvsf/actions/workflows/build.yml)
 [![PyPI - Test Release](https://img.shields.io/badge/Test%20PyPI-vsf-informational)](https://test.pypi.org/project/vsf/)
 [![Docs - latest](https://readthedocs.org/projects/openvsf/badge/?version=latest)](https://openvsf.readthedocs.io/en/latest/)
 
