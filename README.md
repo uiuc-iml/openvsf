@@ -1,3 +1,15 @@
+<div align="center">
+  <img width="500px" src="https://github.com/user-attachments/assets/a916cc94-1ae9-4091-b991-b287d79e3b9f"/>
+</div>
+
+---
+[![PyPI - Test Release](https://img.shields.io/badge/Test%20PyPI-vsf-informational)](https://test.pypi.org/project/vsf/)
+[![Docs - latest](https://readthedocs.org/projects/openvsf/badge/?version=latest)](https://openvsf.readthedocs.io/en/latest/)
+
+```shell
+pip install vsf  # Install OpenVSF library
+```
+
 # Volumetric Stiffness Field (VSF) Library
 
 This library provides an implementation of the Volumetric Stiffness Field (VSF), a model for heterogeneous deformable objects that enables real-time estimation and simulation.  
