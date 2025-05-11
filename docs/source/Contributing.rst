@@ -23,7 +23,7 @@ General Contribution Guidelines
 
     - The OpenVSF codebase is designed to be extensible, supporting the integration of new tactile sensors, simulation processes, and estimation algorithms.
     - The core development team is actively working on expanding these components, and community contributions are encouraged.
-    - New sensors should inherit from the appropriate base abstraction (e.g., ``BaseSensor``) and implement all required methods, such as the ``predict()`` function for simulating tactile signals.
+    - New components should inherit from the appropriate base abstraction and implement all required methods. For example, a new sensor should inherit from `BaseSensor`` and implement `predict()` to simulate tactile signals.
     - Adhering to these interfaces ensures seamless integration with the existing simulation and estimation pipelines.
 
 4. **New Modules**
