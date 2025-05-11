@@ -3,11 +3,11 @@
 </div>
 
 ---
-[![PyPI - Test Release](https://img.shields.io/badge/Test%20PyPI-vsf-informational)](https://test.pypi.org/project/vsf/)
+[![PyPI - Test Release](https://img.shields.io/badge/Test%20PyPI-vsf-informational)](https://test.pypi.org/project/openvsf/)
 [![Docs - latest](https://readthedocs.org/projects/openvsf/badge/?version=latest)](https://openvsf.readthedocs.io/en/latest/)
 
 ```shell
-pip install vsf  # Install OpenVSF library
+pip install openvsf  # Install OpenVSF library
 ```
 
 # Volumetric Stiffness Field (VSF) Library
