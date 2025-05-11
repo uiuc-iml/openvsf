@@ -3,8 +3,11 @@ scipy
 torch
 open3d
 meshio
+trimesh[easy]
 klampt>=0.10.0
 mesh2sdf
 cvxpy
 dacite
 sphinx_rtd_theme
+PyOpenGL
+PyQt5

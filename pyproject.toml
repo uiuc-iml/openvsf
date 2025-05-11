@@ -27,11 +27,14 @@ dependencies = [
   "torch",
   "open3d",
   "meshio",
+  "trimesh[easy]",
   "klampt>=0.10.0",
   "mesh2sdf",
   "cvxpy",
   "dacite",
-  "opencv-python"
+  "opencv-python",
+  "PyOpenGL",
+  "PyQt5"
 ]
 
 [tool.setuptools.packages.find]
