@@ -39,7 +39,7 @@ Core features include:
 
 Features planned soon:
 - Rigid body simulation
-- **Efficiency optimization**: 
+- Efficiency optimization: 
     + speedup neural VSF estimation by scatter dataset to vertex contact forces level
     + use sparse matrix for Punyo dense forces Jacobian
 - Have a standard way to set the initial state for simulations / reset to make sense.
@@ -55,14 +55,7 @@ A minimal set of dependencies are:
 
 You can also install the dependencies including optional utilities (meshio, mesh2sdf, cvxpy) using `pip install -r requirements.txt`.
 
-**Inside iml-internal**: You should use the `iml_utils.import_module` functionality so your code is portable.
-
-```python
-import iml_utils
-vsf = iml_utils.import_module('Libraries/Perception/VolumetricStiffnessField/vsf')
-```
-
-**Outside iml-internal**: We provide a `pyproject.toml` file, so you can install the project with:
+We provide a `pyproject.toml` file, so you can install the project with:
 
 ```bash
 pip install .
