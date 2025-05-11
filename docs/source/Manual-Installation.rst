@@ -17,14 +17,14 @@ To install the latest development version directly from GitHub in editable mode:
 
 **Troubleshooting**
 
-This section provides solutions to some common issues during standard pip installation process.
+This section provides solutions to some common issues during installation process.
 
 1. Potential NumPy 2.0 Conflict
 
    OpenVSF 0.1.0 requires NumPy >= 2.0 and uses its updated `.npz` load/save functionality. All point VSF models are saved in this format.
 
    This is known to have conflict with `open3d <= 0.18.0` and `klampt <= 0.8.0`.  
-   Please install dependencies via `pip` or `pyproject.toml` to ensure compatibility.
+   Pip installation should automatically resolve this, but if you encounter issues, you may need to manually update these packages.
 
 2. Cannot install ``mesh2sdf`` due to build errors
 
