@@ -62,7 +62,7 @@ We provide a pyproject.toml file, so you can install the project locally in edit
 pip install -e .
 ```
 
-If you'd like to work with the source code with installation, first ensure the following minimal dependencies are installed:
+If you'd like to work with the source code without installation, first ensure the following minimal dependencies are installed:
 
 - `numpy`
 - `torch`
@@ -70,7 +70,7 @@ If you'd like to work with the source code with installation, first ensure the f
 - `dacite`
 - `klampt>=0.10.0`
 
-You can install all core and optional dependencies (e.g., `meshio`, `mesh2sdf`, `cvxpy`) using: `pip install -r requirements.txt`
+You can install all dependencies including optional packages (e.g., `meshio`, `mesh2sdf`, `cvxpy`) using: `pip install -r requirements.txt`
 
 
 ## Documentation
