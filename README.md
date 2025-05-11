@@ -46,26 +46,32 @@ Features planned soon:
 
 ## Installation
 
-A minimal set of dependencies are:
-- numpy
-- torch
-- open3d
-- dacite
-- klampt>=0.10.0 
+### Quick Start
 
-You can also install the dependencies including optional utilities (meshio, mesh2sdf, cvxpy) using `pip install -r requirements.txt`.
-
-We provide a `pyproject.toml` file, so you can install the project with:
+You can install the `openvsf` package directly via `pip`:
 
 ```bash
-pip install .
+pip install openvsf
 ```
 
-To install the project in editable mode, use:
+### Local Installation
+
+We provide a pyproject.toml file, so you can install the project locally in editable (development) mode:
 
 ```bash
 pip install -e .
 ```
+
+If you'd like to work with the source code with installation, first ensure the following minimal dependencies are installed:
+
+- `numpy`
+- `torch`
+- `open3d`
+- `dacite`
+- `klampt>=0.10.0`
+
+You can install all core and optional dependencies (e.g., `meshio`, `mesh2sdf`, `cvxpy`) using: `pip install -r requirements.txt`
+
 
 ## Documentation
 
