@@ -14,7 +14,7 @@ pip install openvsf  # Install OpenVSF library
 
 This library provides an implementation of the Volumetric Stiffness Field (VSF), a model for heterogeneous deformable objects that enables real-time estimation and simulation.  
 
-![Gallery](https://github.com/ShaoxiongYao/shaoxiongyao.github.io/blob/a20e1381516670fc05d6ecebe80fa187d068d68b/video/vsf_gallery.gif)
+![Gallery](https://github.com/user-attachments/assets/321282dd-1a10-4ecf-a815-58461ca53ef9)
 
 <p align="center">
   <img src="https://github.com/ShaoxiongYao/shaoxiongyao.github.io/blob/e2f6acb4805dc5a3ef2add4302429806a46ec6b6/video/neural_vsf_estimation.gif" width=46.5% style="margin:5px;"/>
