@@ -50,6 +50,8 @@ def implicit_surface_to_levelsets(vg : ImplicitSurface, stiffness_levels: list, 
         
         c = stiffness_to_color([thresh],stiffness_upper,cmap)[0]
         opacity = thresh/stiffness_upper if stiffness_upper > 0 else 1
+        # TODO: support alternative ways to set opacity
+        # opacity = (i+1)/len(stiffness_levels)
         colors.append([c[0],c[1],c[2],opacity])
         # vis.setColor("mesh_"+str(i),c[0],c[1],c[2],t/stiffness_upper)
 
