@@ -95,6 +95,14 @@ def vsfnet_to_volume_grid(vsf_net : torch.nn.Module, aabb : np.ndarray, resoluti
     return vg
 
 def particle_vsf_to_volume_grid(vsf_samples : np.ndarray, vsf_stiffness : np.ndarray, resolution='auto'):
+    """
+    Convert a set of samples and stiffness values to a volume grid.
+    
+    Args:
+        vsf_samples (np.ndarray): The sampled points in the VSF, shape (N, 3).
+        vsf_stiffness (np.ndarray): The stiffness values of the VSF, shape (N,).
+        resolution (float, optional): The resolution of the volume grid. If 'auto', will automatically determine the resolution.
+    """
     bbox = [np.min(vsf_samples,axis=0),np.max(vsf_samples,axis=0)]
     if resolution == 'auto':
         mindist = float('inf')
