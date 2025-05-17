@@ -76,16 +76,31 @@ def calculate_zy_rotation_for_arrow(vec):
     return Rz, Ry
 
 def create_vector_arrow(end, origin=np.array([0, 0, 0]), scale=1, color=[0.707, 0.707, 0.0]):
-    """Create an arrow mesh from the origin to the end point."""
+    """
+    Create an arrow mesh from the origin to the end point.
+    
+    TODO: find better way to specify parameters of an arrow
+    """
     assert(not np.all(end == origin))
     vec = end - origin
     size = np.sqrt(np.sum(vec**2))
 
     Rz, Ry = calculate_zy_rotation_for_arrow(vec)
-    mesh = o3d.geometry.TriangleMesh.create_arrow(cone_radius=size/17.5 * scale,
-        cone_height=size*0.2 * scale,
-        cylinder_radius=size/30 * scale,
+    # work for neural vsf estimation
+    mesh = o3d.geometry.TriangleMesh.create_arrow(
+        # cone_radius=size/17.5 * scale,
+        cone_radius=0.03/17.5 * scale,
+        cone_height=0.10/17.5 * scale,
+        # cylinder_radius=size/30 * scale,
+        cylinder_radius=0.03/30 * scale,
         cylinder_height=size*(1 - 0.2*scale))
+    # mesh = o3d.geometry.TriangleMesh.create_arrow(
+    #     # cone_radius=size/17.5 * scale,
+    #     cone_radius=0.15/17.5 * scale,
+    #     cone_height=0.45/17.5 * scale,
+    #     # cylinder_radius=size/30 * scale,
+    #     cylinder_radius=0.15/30 * scale,
+    #     cylinder_height=size*(1 - 0.2*scale))
     mesh.rotate(Ry, center=np.array([0, 0, 0]))
     mesh.rotate(Rz, center=np.array([0, 0, 0]))
     mesh.translate(origin)
@@ -401,7 +416,8 @@ def vsf_show(vsf : Union[PointVSF,NeuralVSF],
              N_samples = 200000,
              masked_view_fraction = 0.035,
              auto_stiffness_threshold = 0.01,
-             view_params : O3DViewParams = O3DViewParams()) -> VisManager:
+             view_params : O3DViewParams = O3DViewParams(), 
+             vis_time : float = None) -> VisManager:
     """Visualizes a VSF using Open3D.
     
     Args:
@@ -412,6 +428,10 @@ def vsf_show(vsf : Union[PointVSF,NeuralVSF],
         masked_view_fraction: the fraction of the masked points to show
         auto_stiffness_threshold: the threshold for automatic masking of stiffness values.
         view_params: the view parameters for the visualization.
+        vis_time: the time to wait before closing the visualization, default is None
+            to indicate that the visualization should not be closed automatically, 
+            when the variable is set to positive float, the visualization will be closed
+            after the given time.
     """
     pcd = vsf_to_point_cloud(vsf, mask, N_samples, masked_view_fraction, auto_stiffness_threshold)
     from klampt.io import open3d_convert
