@@ -272,14 +272,20 @@ class PointVSF(BaseVSF):
             raise IOError("Invalid stiffness field size, {} != {}".format(
                 len(self.stiffness), len(self.rest_points)))
 
-    def to(self, device) -> PointVSF:
+    def to(self, device, dtype=None) -> PointVSF:
         """Converts the VSF to a given device or dtype"""
-        return PointVSF(
-            rest_points=self.rest_points.to(device),
-            axis_mode=self.axis_mode,
-            features={
-                k: v.to(device) for k,
-                v in self.features.items()})
+        
+        new_rest_points = self.rest_points.to(device)        
+        new_features = {
+            k: v.to(device) for k, v in self.features.items()}
+
+        if dtype is not None:
+            new_rest_points = new_rest_points.to(dtype)
+            for k, v in new_features.items():
+                new_features[k] = v.to(dtype)
+
+        return PointVSF(rest_points=new_rest_points, 
+                        axis_mode=self.axis_mode, features=new_features)
 
     def compute_forces(self, point_indices: torch.LongTensor,
                        displaced_points: torch.Tensor) -> torch.Tensor:
