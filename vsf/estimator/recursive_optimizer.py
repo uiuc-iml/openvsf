@@ -73,13 +73,26 @@ class ObservationLinearization:
             return pred + self.bias
         return pred
     
-    def to(self, device):
+    def to(self, device, dtype=None):
+        """
+        Move the model to the given device and dtype.
+        
+        NOTE: this will not create a copy of the model, but only
+        internally change the device and dtype of the tensors.
+        """
         self.matrix.to(device)
         self.var.to(device)
+        if dtype is not None:
+            self.matrix = self.matrix.to(dtype)
+            self.var = self.var.to(dtype)
         if self.bias is not None:
             self.bias.to(device)
+            if dtype is not None:
+                self.bias = self.bias.to(dtype)
         if self.state_indices is not None:
             self.state_indices.to(device)
+            if dtype is not None:
+                self.state_indices = self.state_indices.to(dtype)
         return self
     
     @staticmethod
