@@ -111,6 +111,8 @@ class LearnableVSFPriorFactory(BaseVSFPriorFactory):
         """
         for vsf in vsfs:
             assert isinstance(vsf, PointVSF),"Only PointVSF is supported for now"
+        if features is None:
+            features = [None for _ in range(len(vsfs))]
         context_tensors = [self.feature_tensor(vsf,features[i]) for i,vsf in enumerate(vsfs)]
         weight_tensors = [vsf.features[weight_feature] for vsf in vsfs]
         targets = [vsf.stiffness for vsf in vsfs]
@@ -155,12 +157,12 @@ class LearnableVSFPriorFactory(BaseVSFPriorFactory):
     @property
     def device(self) -> torch.device:
         """Returns the device of the parameters."""
-        return next(self.prior.parameters()).device
+        return self.prior.parameters()[0].device
 
     @property
     def dtype(self) -> torch.dtype:
         """Returns the dtype of the parameters."""
-        return next(self.prior.parameters()).dtype
+        return self.prior.parameters()[0].dtype
 
     def feature_tensor(self, vsf : BaseVSF, features : Dict[str,torch.Tensor]) -> torch.Tensor:
         """Helper: returns the feature tensor corresponding to the given keys.
