@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "openvsf"
-version = "0.1.0"
+version = "0.0.1"
 description = "Open volumetric stiffness field"
 authors = [
-  { name = "Kris Hauser", email = "kh@abc.edu" },
   { name = "Shaoxiong Yao", email = "sy@abc.edu" },
-  { name = "Jiaheng Han", email = "jh@abc.edu" }
+  { name = "Jiaheng Han", email = "jh@abc.edu" },
+  { name = "Kris Hauser", email = "kh@abc.edu" }
 ]
 readme = "README.md"
 license = { text = "MIT" }
