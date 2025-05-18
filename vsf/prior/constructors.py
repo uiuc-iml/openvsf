@@ -25,6 +25,18 @@ class PointVSFPriorConfig(PriorConfig):
     feature_keys : List[str] = field(default_factory=list)  # feature keys for the prior
     
 def make_prior(config: PriorConfig) -> BaseConditionalDistribution:
+    """
+    Create a conditional distribution based on the given configuration.
+    
+    TODO: change the function name to `make_conditional_distribution` or similar.
+    TODO: support more types of priors, e.g., 'Mlp' and 'DeepKernal
+    
+    Args:
+        config (PriorConfig): The configuration for the prior.
+        
+    Returns:
+        BaseConditionalDistribution: The created conditional distribution.
+    """
     if config.type == 'gaussian':
         return GaussianConditionalDistribution(config.mu,config.var)
     elif config.type == 'linear_gaussian':
@@ -33,6 +45,17 @@ def make_prior(config: PriorConfig) -> BaseConditionalDistribution:
     raise ValueError("Unknown prior type "+config.type)
 
 def make_prior_factory(config : PointVSFPriorConfig) -> BaseVSFPriorFactory:
+    """
+    Create a prior factory based on the given configuration.
+    
+    Here the prior_factory behaves like a meta-prior as described in the paper.
+    
+    Args:
+        config (PointVSFPriorConfig): The configuration for the prior factory.
+    
+    Returns:
+        BaseVSFPriorFactory: The created prior factory.
+    """
     if config.type == 'gaussian':
         return GaussianVSFPriorFactory(config.mu,config.var)
     else:
