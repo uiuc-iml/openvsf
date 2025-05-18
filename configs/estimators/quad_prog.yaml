@@ -1,4 +1,4 @@
 optimizer : 'quad_prog'     # optimizer type: 'quad_prog', 'sgd', 'diag_ekf', 'dense_ekf'
 # TODO: qp estimator should not have max_buffer_length
 max_buffer_length : 100000  # max replay buffer length for the estimator
-down_sample_rate: 10        # down sample rate for batched estimation
+down_sample_rate: 1        # down sample rate for batched estimation

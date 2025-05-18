@@ -1,7 +1,8 @@
 # demo simulation / estimation configuration for use with point_vsf_estimate.py
 
-world: !include worlds/kinova_world.yaml
-# world: !include worlds/kinova_punyo_world.yaml
+### CHANGE HERE: PATH TO WORLD CONFIG FILE ###
+# world: !include worlds/kinova_world.yaml
+world: !include worlds/kinova_punyo_world.yaml
 
 simulator:
   type: quasistatic
@@ -10,32 +11,37 @@ simulator:
       model:
         type: point
         ### CHANGE HERE: PATH TO EMPTRY VSF FILE NAME ###
-        path: !relative_path ../demo_data/saved_vsfs/rubber_fig_tall_angle00/vsf_empty.npz
-        # path: !relative_path ../demo_data/saved_vsfs/white_nike_angle00/vsf_empty.npz
+        # path: !relative_path ../demo_data/saved_vsfs/rubber_fig_tall_angle00/vsf_empty.npz
+        path: !relative_path ../demo_data/saved_vsfs/white_nike_fixed/vsf_empty.npz
+        # path: !relative_path ../demo_data/saved_vsfs/brown_boot_fixed/vsf_empty.npz
+        # path: !relative_path ../demo_data/saved_vsfs/brown_boot_moving/vsf_empty.npz
       config:
         friction_mu: 0.5
         sim_slide: False
         slide_step: 0.0001
+        geometry_padding1: 0.001
+        geometry_padding2: 0.001
 
 sensors:
-  kinova_joint_torques: !include sensors/kinova_joint_torques.yaml
+  # kinova_joint_torques: !include sensors/kinova_joint_torques.yaml
   # punyo_pressure: !include sensors/punyo_pressure.yaml
+  punyo_force: !include sensors/punyo_force.yaml
 
-calibrators:
-  kinova_joint_torques:
-    type: tare
-    num_samples: 20
-  # punyo_pressure:
-  #   type: tare
-  #   num_samples: 10
+# calibrators:
+#   kinova_joint_torques:
+#     type: tare
+#     num_samples: 20
+#   punyo_pressure:
+#     type: tare
+#     num_samples: 10
 
-#uncomment to train on subset
-#train_sequences: [0]
-#test_sequences: [0]
+# uncomment to train on subset
+# train_sequences: [0, 1, 2]
+# test_sequences: [0]
 
 ### CHANGE HERE: PATH TO DATASET DIRECTORY ###
-dataset: !include ../demo_data/datasets/joint_torques_dataset_config.yaml
-# dataset: !include ../demo_data/datasets/punyo_pressure_dataset_config.yaml
+# dataset: !include ../demo_data/datasets/joint_torques_dataset_config.yaml
+dataset: !include ../demo_data/datasets/punyo_dataset_config.yaml
 
 estimator: !include "estimators/quad_prog.yaml"
 # estimator: !include "estimators/sgd.yaml"
