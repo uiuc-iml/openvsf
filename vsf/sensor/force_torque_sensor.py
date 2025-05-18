@@ -1,7 +1,7 @@
 # Base class for sensor model
 import torch
 import numpy as np
-from klampt import RobotModelLink
+from klampt import RobotModelLink, RigidObjectModel
 from .base_sensor import BaseSensor, SimState
 from ..utils.data_utils import transform_directions
 from typing import Dict,Tuple
@@ -22,7 +22,7 @@ class ForceTorqueSensor(BaseSensor):
         self.tare = None
 
     def attach(self, object):
-        assert isinstance(object,RobotModelLink)
+        assert isinstance(object,RobotModelLink) or isinstance(object, RigidObjectModel)
         self.link = object
 
     def measurement_names(self):
