@@ -17,7 +17,7 @@ This library provides an implementation of the Volumetric Stiffness Field (VSF),
 ![Gallery](https://github.com/user-attachments/assets/321282dd-1a10-4ecf-a815-58461ca53ef9)
 
 <p align="center">
-  <img src="https://github.com/ShaoxiongYao/shaoxiongyao.github.io/blob/e2f6acb4805dc5a3ef2add4302429806a46ec6b6/video/neural_vsf_estimation.gif" width=46% style="margin:5px;"/>
+  <img src="https://github.com/user-attachments/assets/5e89673e-6438-4d44-a67c-42bb90d84912" width=46% style="margin:5px;"/>
   <img src="https://github.com/user-attachments/assets/b4f084b3-bc0a-49c5-beb8-0135b3d11392" width=21% style="margin:5px;"/>
   <img src="https://github.com/user-attachments/assets/7006b119-5608-44cc-9e68-87938c4a453c" width=31% style="margin:5px;"/>
 </p>
