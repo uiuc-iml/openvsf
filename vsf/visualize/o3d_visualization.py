@@ -93,7 +93,7 @@ def create_vector_arrow(end, origin=np.array([0, 0, 0]), scale=1, color=[0.707, 
         cone_height=0.10/17.5 * scale,
         # cylinder_radius=size/30 * scale,
         cylinder_radius=0.03/30 * scale,
-        cylinder_height=size*(1 - 0.2*scale))
+        cylinder_height=size - 0.2*0.10/17.5 * scale)
     # mesh = o3d.geometry.TriangleMesh.create_arrow(
     #     # cone_radius=size/17.5 * scale,
     #     cone_radius=0.15/17.5 * scale,
