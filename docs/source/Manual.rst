@@ -5,5 +5,6 @@ OpenVSF Manual
     :maxdepth: 2
 
     Manual-Installation
+    Manual-QuickStart
     Manual-Walkthrough
     Manual-Customization
