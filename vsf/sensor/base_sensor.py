@@ -83,8 +83,9 @@ class SimState:
             if a == name:
                 pts.append(cps.points)
                 forces.append(cps.forces)
-        pts = torch.concat(pts) if pts else torch.empty(0,3,device=self.device)
-        forces = torch.concat(forces) if forces else torch.empty(0,3,device=next(iter(self.body_transforms.values())).device)
+
+        pts = torch.concat(pts) if pts else torch.empty(0,3,device=self.device,dtype=self.dtype)
+        forces = torch.concat(forces) if forces else torch.empty(0,3,device=self.device,dtype=self.dtype)
         if local:
             T = self.body_transforms[name].to(pts.device).to(pts.dtype)
             Rinv = T[:3,:3].T
