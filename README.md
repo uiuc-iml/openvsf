@@ -17,9 +17,9 @@ This library provides an implementation of the Volumetric Stiffness Field (VSF),
 ![Gallery](https://github.com/user-attachments/assets/321282dd-1a10-4ecf-a815-58461ca53ef9)
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/89276089-0bc5-420b-91a5-0b90306167f7" width=46% style="margin:5px;"/>
-  <img src="https://github.com/user-attachments/assets/b4f084b3-bc0a-49c5-beb8-0135b3d11392" width=21% style="margin:5px;"/>
-  <img src="https://github.com/user-attachments/assets/7006b119-5608-44cc-9e68-87938c4a453c" width=31% style="margin:5px;"/>
+  <img src="https://github.com/user-attachments/assets/89276089-0bc5-420b-91a5-0b90306167f7" width=45% style="margin:1px;"/>
+  <img src="https://github.com/user-attachments/assets/b4f084b3-bc0a-49c5-beb8-0135b3d11392" width=21% style="margin:1px;"/>
+  <img src="https://github.com/user-attachments/assets/7006b119-5608-44cc-9e68-87938c4a453c" width=31% style="margin:1px;"/>
 </p>
 
 It provides two types of VSF models:
