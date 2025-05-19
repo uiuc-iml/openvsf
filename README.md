@@ -5,6 +5,7 @@
 ---
 [![PyPI](https://img.shields.io/pypi/v/openvsf)](https://pypi.org/project/openvsf/)
 [![Docs - latest](https://readthedocs.org/projects/openvsf/badge/?version=latest)](https://openvsf.readthedocs.io/en/latest/)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
 ```shell
 pip install openvsf  # Install OpenVSF library
