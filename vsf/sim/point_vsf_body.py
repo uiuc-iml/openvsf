@@ -308,8 +308,17 @@ class PointVSFQuasistaticSimBody:
             self.perfer.stop('prox')
             
             if prox_idx.size == 0:
-                return np.zeros(0, dtype=int), np.zeros(0, dtype=int), np.zeros((0, 3)), torch.zeros((0, 3),dtype=self.vsf_model.rest_points.dtype,device=self.vsf_model.rest_points.device)
-        
+                contact_indices = np.where(self.point_object_idx >= 0)[0]
+                bodies = self.point_object_idx[contact_indices]
+                vsf_pts = self.point_local[contact_indices]
+                assert isinstance(contact_indices, np.ndarray) and len(contact_indices.shape)==1
+                assert isinstance(vsf_pts, np.ndarray) and len(vsf_pts.shape)==2
+                vsf_forces = self.vsf_model.compute_forces(torch.tensor(contact_indices,dtype=torch.long,device=self.vsf_model.rest_points.device),
+                                                           torch.from_numpy(vsf_pts).to(self.vsf_model.rest_points.device))
+                world_pts = transform_points(vsf_pts,self.pose)
+                world_forces = transform_directions(vsf_forces,self.pose)
+                return contact_indices,bodies,world_pts,world_forces
+
             self.perfer.start('contact')
             pc_obj_idxs, depths, contact_pts, contact_nms = state.query_point_contacts(prox_pts, padding1=self.contact_params.geometry_padding1,padding2=self.contact_params.geometry_padding2)
         else:
