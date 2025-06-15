@@ -2,7 +2,6 @@ import json
 from pathlib import Path
 import os
 
-import cv2
 import numpy as np
 import open3d as o3d
 import torch
@@ -289,7 +288,7 @@ class VSFRGBDCameraFactoryConfig(VSFFactoryConfig):
     """Configuration for a VSF creation process that instantiates a
     point-based VSF from an RGBD camera's point cloud.
     """
-    view : ViewConfig = ViewConfig()    # view configuration
+    view : ViewConfig = field(default_factory=lambda : ViewConfig())    # view configuration
     bbox : Optional[List[List[float]]] = None  # bounding box of the object
     downsample_visual : bool = False
     clean_visual : Optional[CleanPCDConfig] = None  # clean point cloud configuration
