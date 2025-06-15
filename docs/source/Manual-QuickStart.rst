@@ -33,7 +33,6 @@ Imports
 
    import numpy as np
    import time
-   import cv2  # imported but not used in this snippet
 
    from klampt import vis
    from klampt.vis import Appearance

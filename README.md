@@ -55,6 +55,8 @@ You can install the `openvsf` package directly via `pip`:
 pip install openvsf
 ```
 
+For all dependencies that might be used at some point (e.g., `meshio`, `mesh2sdf`, `scipy`, `cv2`), you can install `pip install openvsf[full]`.
+
 ### Local Installation
 
 We provide a pyproject.toml file, so you can install the project locally in editable (development) mode:
@@ -70,8 +72,9 @@ If you'd like to work with the source code without installation, first ensure th
 - `open3d`
 - `dacite`
 - `klampt>=0.10.0`
+- `cvxpy`
 
-You can install all dependencies including optional packages (e.g., `meshio`, `mesh2sdf`, `cvxpy`) using: `pip install -r requirements.txt`
+You can install all dependencies including optional packages (e.g., `meshio`, `mesh2sdf`, `scipy`) using: `pip install -r requirements.txt`.
 
 
 ## Documentation

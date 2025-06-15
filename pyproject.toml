@@ -7,9 +7,9 @@ name = "openvsf"
 version = "0.0.1"
 description = "Open volumetric stiffness field"
 authors = [
-  { name = "Shaoxiong Yao", email = "sy@abc.edu" },
-  { name = "Jiaheng Han", email = "jh@abc.edu" },
-  { name = "Kris Hauser", email = "kh@abc.edu" }
+  { name = "Shaoxiong Yao", email = "syao16@illinois.edu" },
+  { name = "Jiaheng Han", email = "jh127@illinois.edu" },
+  { name = "Kris Hauser", email = "kkhauser@illinois.edu" }
 ]
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -23,18 +23,22 @@ classifiers = [
 keywords = ["tactile model", "simulation", "estimation"]
 dependencies = [
   "numpy",
-  "scipy",
   "torch",
   "open3d",
-  "meshio",
   "trimesh[easy]",
   "klampt>=0.10.0",
-  "mesh2sdf",
   "cvxpy",
   "dacite",
-  "opencv-python",
+]
+
+[project.optional-dependencies]
+full = [
+  "meshio",
+  "mesh2sdf",
   "PyOpenGL",
-  "PyQt5"
+  "PyQt5",
+  "opencv-python",
+  "scipy",
 ]
 
 [tool.setuptools.packages.find]
