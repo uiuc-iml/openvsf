@@ -243,7 +243,7 @@ class klamptWorldWrapper:
         :param tgt_type: target geometry type
 
         "src_type" and "tgt_type" can be one of the following:
-        - 'VolumeGrid'
+        - 'ImplicitSurface'
         - 'TriangleMesh'
         - 'PointCloud'
         Note this function will not change geometry not matching the "src_type"
@@ -253,10 +253,9 @@ class klamptWorldWrapper:
 
             if rigid_model.geometry().type() == src_type:
                 geom = rigid_model.geometry()
-
                 new_geom = geom.convert(tgt_type).copy()
-                if tgt_type == 'VolumeGrid':
-                    rigid_model.geometry().setVolumeGrid(new_geom.getVolumeGrid())
+                if tgt_type == 'ImplicitSurface':
+                    rigid_model.geometry().setImplicitSurface(new_geom.getImplicitSurface())
                 elif tgt_type == 'TriangleMesh':
                     rigid_model.geometry().setTriangleMesh(new_geom.getTriangleMesh())
                 elif tgt_type == 'PointCloud':
@@ -311,7 +310,7 @@ class klamptWorldWrapper:
         for name in self.name_lst:
             model = self.bodies_dict[name]
             if model.geometry().type() == 'TriangleMesh':
-                geom = model.geometry().convert('VolumeGrid', param=resolution)
+                geom = model.geometry().convert('ImplicitSurface', param=resolution)
             else:
                 geom = None
                 # raise ValueError("Can only convert triangle mesh to signed distance field")
