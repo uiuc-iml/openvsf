@@ -85,7 +85,7 @@ You can install all dependencies including optional packages (e.g., `meshio`, `m
 
 1. Install Sphinx:  
     ```bash
-    pip install sphinx sphinx-autobuild
+    pip install sphinx sphinx-autobuild sphinx_rtd_theme
     ```
 1. Navigate to `docs` and build:
     ```bash
