@@ -212,26 +212,27 @@ class LinearRecursiveEstimator:
     
     .. math::
 
-        x = y + A*q in R^n 
+        x = y + A*q \\in \\mathbb{R}^n 
         
-    where y in R^n is a heterogeneous term and q in R^k is a latent factor. 
+    where `y` in :math:`\\mathbb{R}^n` is a heterogeneous term and `q` in :math:`\\mathbb{R}^k` 
+    is a latent factor. 
     If the latent factor is included, A is a known basis matrix.  Diagonal priors 
     should be defined over y and q,
     
     .. math::
     
-        y ~ N(mu_y,diag(Sig_y)),      q ~ N(mu_q,diag(Sig_q))
+        y \\sim N(\\mu_y,\\text{diag}(\\Sigma_y)),      q \\sim N(\\mu_q,\\text{diag}(\\Sigma_q))
 
-    such that x has the prior N(mu_y + A*mu_q, diag(Sig_y) + A * diag(Sig_q) * A^T).
+    such that `x` has the prior `N(\\mu_y + A*\\mu_q, diag(\\Sig_y) + A * diag(\\Sig_q) * A^T)`.
     To mark the heterogeneous factor as optional, set Sig_y = 0.  To mark the
     latent factor as optional, set Sig_q = 0 or A = None.
         
     Observations are given by vectors z^i, observation matrices W^i, optional
-    indices ind^i, biases z0^i, and covariances Sig_z^i such that
+    indices ind^i, biases z0^i, and covariances :math:`Sigma_z^i` such that
     
     .. math::
     
-        z^i = W^i * x[ind^i] + z0^i + eps^i,     eps^i ~ N(0,Sig_z^i).
+        z^i = W^i * x[ind^i] + z0^i + \\epsilon^i,     \\epsilon^i \\sim N(0,\\Sigma_z^i).
 
     This class provides shared methods for different instantiations of the
     estimator.  It gives a replay buffer and 
