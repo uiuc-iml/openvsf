@@ -12,6 +12,7 @@ autodoc_mock_imports = [
     "OpenGL.GL",
     "OpenGL.GLU",
     # any other modules that load OpenGL
+    "cv2"
 ]
 
 # -- Project information
