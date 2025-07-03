@@ -106,6 +106,13 @@ The best way to get familiarized with this package is the Jupyter notebooks `dem
 
 The `vsf_playground` walkthrough focuses on point-based VSFs, while `neural_vsf_playground` focuses on neural VSFs.
 
+Here's some demo data captured using the Kinova robot arm and Punyo Bubble sensor(vision-based tactile sensor), which can be used to estimate VSF models.
+|               | Number of Objects | Sensor Type    | Link |
+| ------------- | ----------------- | -------------- | --------- |
+| Demo Dataset  | 6(plants+shoes)   | Joint Torque / Punyo Dense Force / Punyo Pressure| https://uofi.box.com/s/31wozq63qgqvg8012r1jdfj5mdchmmfp (~130 MB) |
+| Plant Dataset | 58(plants)        | Joint Torque   | https://uofi.box.com/s/m5rrnt6qukc1kespo30hcruqvq7j52dq (~600 MB) |
+| Shoe Dataset  | 23(shoes)         | Punyo Pressure | https://uofi.box.com/s/4j0xz7pjc1p4jpafxtnp6ebgd362wq6u (~100 MB) |
+
 + ### File formats
 
 A `PointVSF` instance can be loaded from / saved to a Numpy archive (npz) file or a folder containing Numpy files. 
